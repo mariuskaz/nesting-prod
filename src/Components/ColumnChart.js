@@ -4,9 +4,9 @@ import { Chart } from "react-google-charts"
 const color = "color:rgb(51, 102, 204)"
 
 export const options = {
+  legend: "none",
   title: "Realaus laiko rezultatai",
   //vAxis: { title: "Lapai", viewWindow: { min: 0, max: 16 } },
-  legend: "none",
 };
 
 export const data = [

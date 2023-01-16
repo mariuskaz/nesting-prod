@@ -11,7 +11,9 @@ export const data = [
 ];
 
 export const options = {
-    title: "My Daily Activities",
+    legend: "none",
+    pieSliceText: "label",
+    title: "Nestingas",
 };
 
 export default function PieChart() {
@@ -19,6 +21,7 @@ export default function PieChart() {
     <Chart
       chartType="PieChart"
       data={data}
+      options={options}
       style={{ display:'inline-block', margin:'10px'}}
       width={"400px"}
       height={"300px"}
