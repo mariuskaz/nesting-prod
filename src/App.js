@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ColumnChart from "./Components/ColumnChart";
 import PieChart from "./Components/PieChart";
+import TableChart from "./Components/TableChart";
 
 export default function App() {
   const [ date, setDate ] = useState(new Date("2022-12-19"))
@@ -108,6 +109,7 @@ export default function App() {
     ["Prastova", 0],
   ]
 
+
   function update(e) {
     setDate(new Date(e.target.value))
     setSynced(false)
@@ -118,12 +120,13 @@ export default function App() {
     <>
       <input
         type="date" 
-        style={{ padding:'1px', margin:'10px 10px 0' }} onChange={update}
+        style={{ padding:'1px', margin:'10px 10px 0', border:'1px solid lightgray' }} onChange={update}
         value={date.toLocaleString("default", { dateStyle:"short" })}/>
       <ColumnChart data={sheets}/>
       <PieChart title={"Nestingas #1"} data={nest1} />
       <PieChart title={"Nestingas #2"} data={nest2} />
       <PieChart title={"Nestingas #3"} data={nest3} />
+      <TableChart data={nest1} />
     </>
   );
 }
