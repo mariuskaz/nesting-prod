@@ -1,27 +1,21 @@
 import React from 'react'
 import { Chart } from "react-google-charts"
 
-const color = "color:rgb(51, 102, 204)"
-
-export const options = {
+const options = {
   legend: "none",
-  title: "Realaus laiko rezultatai",
-  //vAxis: { title: "Lapai", viewWindow: { min: 0, max: 16 } },
-};
-
-export const data = [
-  ["Element", "Lapai", { role: "style" }],
-  ["Nestingas #1", 12, color],
-  ["Nestingas #2", 5, color], 
-  ["Nestingas #3", 10, color],
-];
-
-export const style = {
-    padding:"10px"
+  title: "Realaus laiko rezultatai lapais",
+  vAxis: { 
+    viewWindow: { min: 0, max: 16 }, 
+    ticks: [0, 2, 4, 6, 8, 10, 12, 14, 16] 
+  }
 }
 
-export default function ColumnChart() {
+const style = {
+    padding:"5px"
+}
+
+export default function ColumnChart({data}) {
   return (
-    <Chart chartType="ColumnChart" width="820px" height="400px" data={data} options={options} style={style} />
+    <Chart chartType="ColumnChart" width="920px" height="400px" data={data} options={options} style={style} />
   )
 }
