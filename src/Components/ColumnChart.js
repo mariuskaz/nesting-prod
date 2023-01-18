@@ -12,6 +12,16 @@ const options = {
 
 export default function ColumnChart({ items }) {
 
+  if (items.length === 0) return (
+    <h2 style={{
+      padding:'20px', 
+      margin:'20px 10px 5px', 
+      background:'white', 
+      textAlign:'center',
+      color:'gray'}}
+    >Nerasta jokių duomenų!</h2>
+  )
+
   const machines = [...new Set(items.map(item => item.machine))]
   const header =  [["Nestingas", "Lapai", { role: 'annotation' }, { role: "style" }]]
   const rows = machines.map( machine => [
@@ -22,7 +32,6 @@ export default function ColumnChart({ items }) {
   ])
 
   const data = [...header, ...rows]
-  console.log(data.length, data)
 
   return (
     <Chart chartType="ColumnChart" width="920px" height="400px" data={data} options={options} style={style} />

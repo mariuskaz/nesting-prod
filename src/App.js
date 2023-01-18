@@ -15,10 +15,11 @@ export default function App() {
   const [ data, setData ] = useState([])
 
   const date_style = {
-    padding:'1px', margin:'10px 10px 0', border:'1px solid lightgray'
+    padding:'4px', margin:'10px 10px 0', border:'1px solid lightgray'
   }
 
   const short_date = date.toLocaleString("default", { dateStyle:"short" })
+  console.log(short_date)
 
   useEffect(() => {
 
