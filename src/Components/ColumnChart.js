@@ -6,7 +6,7 @@ const blue_color = "color:rgb(51, 102, 204)"
 
 const options = {
   legend: "none", 
-  title: "Realaus laiko rezultatai lapais",
+  title: "Realaus laiko rezultatai",
   vAxis: { viewWindow: { min: 0, max: 16 }, ticks: [0, 2, 4, 6, 8, 10, 12, 14, 16] }
 }
 
@@ -22,12 +22,12 @@ export default function ColumnChart({ items }) {
     >Nerasta jokių duomenų!</h2>
   )
 
-  const machines = [...new Set(items.map(item => item.machine))]
+  const machines = [1, 2, 3] //[...new Set(items.map(item => item.machine))].sort()
   const header =  [["Nestingas", "Lapai", { role: 'annotation' }, { role: "style" }]]
   const rows = machines.map( machine => [
     "Nestingas #" + machine, 
     items.filter(item => item.machine === machine && item.type === "Gamyba").length, 
-    items.filter(item => item.machine === machine && item.type === "Gamyba").length, 
+    items.filter(item => item.machine === machine && item.type === "Gamyba").length + " lapai", 
     blue_color
   ])
 

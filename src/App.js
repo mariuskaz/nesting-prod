@@ -10,7 +10,7 @@ const locations = [
 ]
 
 export default function App() {
-  const [ date, setDate ] = useState(new Date("2022-12-30"))
+  const [ date, setDate ] = useState(new Date())
   const [ synced, setSynced ] = useState(false)
   const [ data, setData ] = useState([])
 
@@ -18,8 +18,8 @@ export default function App() {
     padding:'4px', margin:'10px 10px 0', border:'1px solid lightgray'
   }
 
-  const short_date = date.toLocaleString("default", { dateStyle:"short" })
-  console.log(short_date)
+  const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
+  const today = new Intl.DateTimeFormat('lt-LT').format(new Date())
 
   useEffect(() => {
 
@@ -72,7 +72,13 @@ export default function App() {
 
     if (!synced) fetchData()
 
-  }, [synced, data, date])
+    /* const refresh = setInterval(() => {
+       if (short_date === today) setSynced(false)
+    }, 1000 * 60 * 5)
+
+    return () => clearInterval(refresh) */
+
+  }, [synced, data, date, short_date, today])
 
   function handleChange(e) {
     setDate(new Date(e.target.value))
