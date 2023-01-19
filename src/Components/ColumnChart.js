@@ -7,7 +7,8 @@ const blue_color = "color:rgb(51, 102, 204)"
 const options = {
   legend: "none", 
   title: "Realaus laiko rezultatai",
-  vAxis: { viewWindow: { min: 0, max: 16 }, ticks: [0, 2, 4, 6, 8, 10, 12, 14, 16] }
+  vAxis: { format: '0', viewWindow: { min: 0 } }
+  //vAxis: { viewWindow: { min: 0, max: 16 }, ticks: [0, 2, 4, 6, 8, 10, 12, 14, 16] }
 }
 
 export default function ColumnChart({ items }) {
