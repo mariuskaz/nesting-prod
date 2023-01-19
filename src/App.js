@@ -10,16 +10,9 @@ const locations = [
 ]
 
 export default function App() {
-  const [ date, setDate ] = useState(new Date())
   const [ synced, setSynced ] = useState(false)
-  const [ data, setData ] = useState([])
-
-  const date_style = {
-    padding:'4px', margin:'10px 10px 0', border:'1px solid lightgray'
-  }
-
-  const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
-  const today = new Intl.DateTimeFormat('lt-LT').format(new Date())
+  const [ date, setDate ] = useState(new Date())
+  const [ items, setItems ] = useState([])
 
   useEffect(() => {
 
@@ -30,7 +23,7 @@ export default function App() {
     const urls = locations.map( location => location + file)
 
     const fetchData = async() => {
-      let items = []
+      let data = []
       await Promise.all(
         urls.map((url, index) =>
             fetch(url)
@@ -58,44 +51,53 @@ export default function App() {
                     if (filename.includes("_J1C") || filename.includes("_J2C")) type="II darbas"
 
                     //console.log(filename, duration)
-                    if (name.length > 0) items.push({ machine, name, start, end, duration, type })
+                    if (name.length > 0) data.push({ machine, name, start, end, duration, type })
                   }
 
                 })
         )
       )
 
+      setItems(data)
       setSynced(true)
-      setData(items)
 
     }
 
     if (!synced) fetchData()
 
-    /* const refresh = setInterval(() => {
-       if (short_date === today) setSynced(false)
+    const refresh = setInterval(() => {
+        const today = new Date().setHours(0,0,0,0)
+        const picked = date.setHours(0,0,0,0)
+        if (picked === today) setSynced(false)
     }, 1000 * 60 * 5)
 
-    return () => clearInterval(refresh) */
+    return () => clearInterval(refresh)
 
-  }, [synced, data, date, short_date, today])
+  }, [synced, date, items])
 
-  function handleChange(e) {
-    setDate(new Date(e.target.value))
-    setSynced(false)
-    e.target.blur()
+  console.log('completed items:', items.length)
+
+  const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
+  const date_style = {
+    padding:'4px', margin:'10px 10px 0', border:'1px solid lightgray'
   }
 
-  console.log('items found', data.length)
+  function handleChange(e) {
+    if (e.target.value.length) {
+      setDate(new Date(e.target.value))
+      setSynced(false)
+      e.target.blur()
+    }
+  }
   
   return (
     <>
       <input type="date" style={date_style} value={short_date} onChange={handleChange} />
-      <ColumnChart items={data} />
-      <PieChart machine={1} items={data} />
-      <PieChart machine={2} items={data} />
-      <PieChart machine={3} items={data} />
-      <TableChart items={data} />
+      <ColumnChart items={items} />
+      <PieChart machine={1} items={items} />
+      <PieChart machine={2} items={items} />
+      <PieChart machine={3} items={items} />
+      <TableChart items={items} />
     </>
   );
 }
