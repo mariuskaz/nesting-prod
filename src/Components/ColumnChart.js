@@ -20,7 +20,7 @@ export default function ColumnChart({ items }) {
       background:'white', 
       textAlign:'center',
       color:'gray'}}
-    >Nerasta jokių duomenų!</h2>
+    >Nėra duomenų!</h2>
   )
 
   const machines = [1, 2, 3] //[...new Set(items.map(item => item.machine))].sort()

@@ -3,7 +3,7 @@ import { Chart } from "react-google-charts";
 
 export default function TableChart({ items }) {
   
-  const options = { title: "Programos", width:'920px' }
+  const options = { title: "Programos", width:'920px', allowHtml: true, }
   const style= { margin:'5px' }
 
   //const round2 = (num) => +(Math.round(num + "e+2")  + "e-2")
@@ -11,41 +11,58 @@ export default function TableChart({ items }) {
   const duration = (total, item) => Math.round(total + item.duration)
 
   const data = [
-    ["Programos tipas", "Nest.#1, min", "Nest.#2, min", "Nest.#3, min"],
-    ["Gamyba", 
-      items.filter(item => filter(item, 1, "Gamyba")).reduce(duration, 0),
-      items.filter(item => filter(item, 2, "Gamyba")).reduce(duration, 0),
-      items.filter(item => filter(item, 3, "Gamyba")).reduce(duration, 0),
+    [" ", "Programos tipas", "Nestingas #1", "Nestingas #2", "Nestingas #3"],
+    [1, "Gamyba",
+      items.filter(item => filter(item, 1, "Gamyba")).reduce(duration, 0)+":00 min",
+      items.filter(item => filter(item, 2, "Gamyba")).reduce(duration, 0)+":00 min",
+      items.filter(item => filter(item, 3, "Gamyba")).reduce(duration, 0)+":00 min",
     ],
-    ["Pagalbinės programos", 
-    items.filter(item => filter(item, 1, "Pagalbinė")).reduce(duration, 0),
-    items.filter(item => filter(item, 2, "Pagalbinė")).reduce(duration, 0),
-    items.filter(item => filter(item, 3, "Pagalbinė")).reduce(duration, 0),
+    [2, "Pagalbinės programos", 
+    items.filter(item => filter(item, 1, "Pagalbinė")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 2, "Pagalbinė")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 3, "Pagalbinė")).reduce(duration, 0)+":00 min",
     ],
-    ["Antras darbas", 
-    items.filter(item => filter(item, 1, "II darbas")).reduce(duration, 0),
-    items.filter(item => filter(item, 2, "II darbas")).reduce(duration, 0),
-    items.filter(item => filter(item, 3, "II darbas")).reduce(duration, 0),
+    [3, "Antras darbas", 
+    items.filter(item => filter(item, 1, "II darbas")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 2, "II darbas")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 3, "II darbas")).reduce(duration, 0)+":00 min",
     ],
-    ["Brokas", 
-    items.filter(item => filter(item, 1, "Brokas")).reduce(duration, 0),
-    items.filter(item => filter(item, 2, "Brokas")).reduce(duration, 0),
-    items.filter(item => filter(item, 3, "Brokas")).reduce(duration, 0),
+    [4, "Kitos programos", 
+    items.filter(item => filter(item, 1, "Kiti")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 2, "Kiti")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 3, "Kiti")).reduce(duration, 0)+":00 min",
     ],
-    ["Kitos programos", 
-    items.filter(item => filter(item, 1, "Kiti")).reduce(duration, 0),
-    items.filter(item => filter(item, 2, "Kiti")).reduce(duration, 0),
-    items.filter(item => filter(item, 3, "Kiti")).reduce(duration, 0),
+    [null, "Brokas", 
+    items.filter(item => filter(item, 1, "Brokas")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 2, "Brokas")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 3, "Brokas")).reduce(duration, 0)+":00 min",
     ],
-    ["Prastova", 0, 0, 0],
+    [null, "Prastova",  0+":00 min", 0+":00 min", 0+":00 min"],
   ]
-  
+
+  const formatters = [
+    {
+      type: "ColorFormat",
+      column: 0,
+      options: {
+        width: 50,
+      },
+      ranges: [
+        [0, 2, "#3366CC", "#3366CC"],
+        [1, 3, "#DC3912", "#DC3912"],
+        [2, 4, "#FF9900", "#FF9900"],
+        [3, 5, "#990099", "#990099"],
+      ],
+    },
+  ];
+
   return (
     <Chart
       chartType="Table"
       data={data}
       options={options}
       style={style}
+      formatters={formatters}
     />
   );
 }

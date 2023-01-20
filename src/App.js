@@ -55,6 +55,7 @@ export default function App() {
                   }
 
                 })
+                .catch(err => console.log)
         )
       )
 
@@ -75,7 +76,8 @@ export default function App() {
 
   }, [synced, date, items])
 
-  console.log('completed items:', items.length)
+  const time = new Date().toLocaleTimeString()
+  console.log(time, 'completed items:', items.length)
 
   const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
   const date_style = {
