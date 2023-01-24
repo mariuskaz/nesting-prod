@@ -4,13 +4,6 @@ import { Chart } from "react-google-charts"
 const style = { padding:"5px" }
 const blue_color = "color:rgb(51, 102, 204)"
 
-const options = {
-  legend: "none", 
-  title: "Realaus laiko rezultatai",
-  vAxis: { format: '0', viewWindow: { min: 0 } }
-  //vAxis: { viewWindow: { min: 0, max: 16 }, ticks: [0, 2, 4, 6, 8, 10, 12, 14, 16] }
-}
-
 export default function ColumnChart({ items }) {
 
   if (items.length === 0) return (
@@ -24,6 +17,16 @@ export default function ColumnChart({ items }) {
   )
 
   const machines = [1, 2, 3] //[...new Set(items.map(item => item.machine))].sort()
+  const sheets = machines.map( machine => items.filter(item => item.machine === machine && item.type === "Gamyba").length)
+  const maximum = Math.max(...sheets)
+  const qty = sheets.reduce((total, qty) => total + qty, 0)
+  
+  const options = {
+    legend: "none", 
+    title: "Realaus laiko rezultatai (" + qty + " lap.)",
+    vAxis: { format: '0', viewWindow: { min: 0, max: maximum < 15 ? 15 : maximum } }
+  }
+  
   const header =  [["Nestingas", "Lapai", { role: 'annotation' }, { role: "style" }]]
   const rows = machines.map( machine => [
     "Nestingas #" + machine, 

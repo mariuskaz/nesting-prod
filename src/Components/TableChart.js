@@ -2,8 +2,9 @@ import React from "react";
 import { Chart } from "react-google-charts";
 
 export default function TableChart({ items }) {
-  
-  const options = { title: "Programos", width:'920px', allowHtml: true, }
+
+  const cssClassNames = { headerRow:'table-header' }
+  const options = { title: "Programos", width:'920px', allowHtml: true, cssClassNames }
   const style= { margin:'5px' }
 
   //const round2 = (num) => +(Math.round(num + "e+2")  + "e-2")
@@ -11,7 +12,7 @@ export default function TableChart({ items }) {
   const duration = (total, item) => Math.round(total + item.duration)
 
   const data = [
-    [" ", "Programos tipas", "Nestingas #1", "Nestingas #2", "Nestingas #3"],
+    [" ", "Veikla", "Nestingas #1", "Nestingas #2", "Nestingas #3"],
     [1, "Gamyba",
       items.filter(item => filter(item, 1, "Gamyba")).reduce(duration, 0)+":00 min",
       items.filter(item => filter(item, 2, "Gamyba")).reduce(duration, 0)+":00 min",
@@ -32,7 +33,7 @@ export default function TableChart({ items }) {
     items.filter(item => filter(item, 2, "Kiti")).reduce(duration, 0)+":00 min",
     items.filter(item => filter(item, 3, "Kiti")).reduce(duration, 0)+":00 min",
     ],
-    [null, "Brokas", 
+    [5, "Brokas", 
     items.filter(item => filter(item, 1, "Brokas")).reduce(duration, 0)+":00 min",
     items.filter(item => filter(item, 2, "Brokas")).reduce(duration, 0)+":00 min",
     items.filter(item => filter(item, 3, "Brokas")).reduce(duration, 0)+":00 min",
@@ -49,9 +50,10 @@ export default function TableChart({ items }) {
       },
       ranges: [
         [0, 2, "#3366CC", "#3366CC"],
-        [1, 3, "#DC3912", "#DC3912"],
-        [2, 4, "#FF9900", "#FF9900"],
+        [1, 3, "#FF9900", "#FF9900"],
+        [2, 4, "#109618", "#109618"],
         [3, 5, "#990099", "#990099"],
+        [4, 6, "#DC3912", "#DC3912"],
       ],
     },
   ];

@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  padding-bottom: 50px;
+  padding-bottom: 20px;
   background:whitesmoke;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -17,4 +17,11 @@ code {
 #root {
   margin:auto;
   width:940px;
+}
+
+.table-header {
+  font-family: Courier, monospace;
+  font-weight:200;
+  font-size: small;
+  height:30px;
 }

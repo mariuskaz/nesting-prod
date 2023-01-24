@@ -99,7 +99,7 @@ export default function App() {
       <PieChart machine={1} items={items} />
       <PieChart machine={2} items={items} />
       <PieChart machine={3} items={items} />
-      <TableChart items={items} />
+      {items.length > 0 && <TableChart items={items} />}
     </>
   );
 }
