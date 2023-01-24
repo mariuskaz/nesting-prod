@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   background:whitesmoke;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -24,4 +24,33 @@ code {
   font-weight:200;
   font-size: small;
   height:30px;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 200,
+  'opsz' 48
+}
+
+.side-icon {
+  padding:10px;
+  font-size: xx-large;
+}
+
+.side-icon:hover {
+  cursor:pointer;
+  background:#eee;
+}
+
+.sidebar {
+  height:100%;
+  width:50px;
+  background:white;
+  position: fixed;
+  left:0px;
+  text-align:center;
+  font-size:large;
+  z-index: 999;
 }

@@ -4,7 +4,7 @@ import { Chart } from "react-google-charts"
 const style = { padding:"5px" }
 const blue_color = "color:rgb(51, 102, 204)"
 
-export default function ColumnChart({ items }) {
+export default function ColumnChart({ title, items }) {
 
   if (items.length === 0) return (
     <h2 style={{
@@ -23,7 +23,7 @@ export default function ColumnChart({ items }) {
   
   const options = {
     legend: "none", 
-    title: "Realaus laiko rezultatai (" + qty + " lap.)",
+    title: title + " (" + qty + " lap.)",
     vAxis: { format: '0', viewWindow: { min: 0, max: maximum < 15 ? 15 : maximum } }
   }
   

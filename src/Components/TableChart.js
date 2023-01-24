@@ -33,7 +33,7 @@ export default function TableChart({ items }) {
     items.filter(item => filter(item, 2, "Kiti")).reduce(duration, 0)+":00 min",
     items.filter(item => filter(item, 3, "Kiti")).reduce(duration, 0)+":00 min",
     ],
-    [5, "Brokas", 
+    [5, "Broko taisymas", 
     items.filter(item => filter(item, 1, "Brokas")).reduce(duration, 0)+":00 min",
     items.filter(item => filter(item, 2, "Brokas")).reduce(duration, 0)+":00 min",
     items.filter(item => filter(item, 3, "Brokas")).reduce(duration, 0)+":00 min",

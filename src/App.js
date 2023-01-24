@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import ColumnChart from "./Components/ColumnChart";
-import PieChart from "./Components/PieChart";
-import TableChart from "./Components/TableChart";
+import React, { useState, useEffect } from "react"
+import NestingCharts from "./Components/NestingCharts"
+import Sidebar from "./Components/Sidebar"
+import DataTable from "./Components/DataTable"
 
 const locations = [
   "http://192.168.100.102/nesting/snovar%2001/tpaprod/",
@@ -13,6 +13,7 @@ export default function App() {
   const [ synced, setSynced ] = useState(false)
   const [ date, setDate ] = useState(new Date())
   const [ items, setItems ] = useState([])
+  const [ view, setView ] = useState(0)
 
   useEffect(() => {
 
@@ -62,6 +63,9 @@ export default function App() {
       setItems(data)
       setSynced(true)
 
+      const time = new Date().toLocaleTimeString()
+      console.log(time, 'completed items:', data.length)
+
     }
 
     if (!synced) fetchData()
@@ -76,14 +80,6 @@ export default function App() {
 
   }, [synced, date, items])
 
-  const time = new Date().toLocaleTimeString()
-  console.log(time, 'completed items:', items.length)
-
-  const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
-  const date_style = {
-    padding:'4px', margin:'10px 10px 0', border:'1px solid lightgray'
-  }
-
   function handleChange(e) {
     if (e.target.value.length) {
       setDate(new Date(e.target.value))
@@ -94,12 +90,9 @@ export default function App() {
   
   return (
     <>
-      <input type="date" style={date_style} value={short_date} onChange={handleChange} />
-      <ColumnChart items={items} />
-      <PieChart machine={1} items={items} />
-      <PieChart machine={2} items={items} />
-      <PieChart machine={3} items={items} />
-      {items.length > 0 && <TableChart items={items} />}
+      <Sidebar change={(i)=>setView(i)} />
+      {view === 0 && <NestingCharts date={date} items={items} change={handleChange} />}
+      {view === 1 && <DataTable items={items} />}
     </>
   );
 }
