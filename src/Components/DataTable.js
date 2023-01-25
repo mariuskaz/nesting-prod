@@ -3,19 +3,29 @@ import { Chart } from "react-google-charts";
 
 export default function DataTable({ items }) {
 
-  const options = { title: "Programos", width:'920px', allowHtml: true }
-  const style= { marginnn:'5px', }
+  const options = {
+    allowHtml: true,  
+    title: "Programos", 
+    width:'920px', 
+    pageSizeee: 30, 
+  }
+
+  const style= { 
+    margin:'15px 5px', 
+  }
+
+  const format = t => { 
+    return new Date(t).toLocaleTimeString() 
+  }
 
   const data = [
-    ["Startas", "Pabaiga", "Trukmė", "Programa", "Tipas"],
-    ...items.map(item => [item.start, item.end, item.duration, item.name, item.type]),
+    ["Nest", "Startas", "Pabaiga", "Trukmė", "Programa", "Sutr.", "Failo tipas"],
+      ...items.map(item => 
+        [ item.machine, format(item.start), format(item.end), item.duration, item.name, item.failed, item.type ]),
   ]
-
-  console.log(data)
 
   return (
     <>
-      <br/>
       <Chart
         chartType="Table"
         data={data}

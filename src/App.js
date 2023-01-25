@@ -43,6 +43,7 @@ export default function App() {
                     end = programs[item].getElementsByTagName("End")[0]?.childNodes[0].nodeValue || "",
                     duration = (new Date(end) - new Date(start)) / 1000 / 60,
                     filename = name.substring(name.lastIndexOf('\\') + 1),
+                    failed = programs[item].getElementsByTagName("Interrupted")[0]?.childNodes[0].nodeValue || "0",
                     type = "Kiti"
 
                     if (regex.test(filename.substring(0, 5))) type = "Gamyba"
@@ -52,7 +53,7 @@ export default function App() {
                     if (filename.includes("_J1C") || filename.includes("_J2C")) type="II darbas"
 
                     //console.log(filename, duration)
-                    if (name.length > 0) data.push({ machine, name, start, end, duration, type })
+                    if (name.length > 0) data.push({ machine, name, start, end, duration, failed, type })
                   }
 
                 })
@@ -87,11 +88,17 @@ export default function App() {
       e.target.blur()
     }
   }
+
+  const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
+  const date_style = {
+    padding:'4px', margin:'10px 10px 0', border:'1px solid lightgray'
+  }
   
   return (
     <>
       <Sidebar change={(i)=>setView(i)} />
-      {view === 0 && <NestingCharts date={date} items={items} change={handleChange} />}
+      <input type="date" style={date_style} value={short_date} onChange={handleChange} />
+      {view === 0 && <NestingCharts date={date} items={items} />}
       {view === 1 && <DataTable items={items} />}
     </>
   );

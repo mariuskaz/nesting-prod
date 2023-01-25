@@ -42,12 +42,14 @@ code {
 .side-icon:hover {
   cursor:pointer;
   background:#eee;
+  color:black;
 }
 
 .sidebar {
   height:100%;
   width:50px;
   background:white;
+  color:dimgray;
   position: fixed;
   left:0px;
   text-align:center;
