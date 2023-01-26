@@ -11,13 +11,13 @@ export default function DataTable({ items }) {
     allowHtml: true,  
     title: "Programos", 
     width:'920px', 
-    pageSizeee: 30, 
+    /* pageSize: 40, */
     sortColumn: 0,
     cssClassNames,
   }
 
   const style= { 
-    margin:'20px 5px 50px',
+    margin:'10px 5px 50px',
   }
 
   const time = t => { 
@@ -38,7 +38,7 @@ export default function DataTable({ items }) {
     console.log('download file')
     let content = "Nestingas;Startas;Pabaiga;Trukmė;Programa;Sutrikimai;Programos tipas\n"
     let link = document.createElement('a')
-    items.forEach(item => content += `${item.machine};${item.start};${item.end};${item.duration};${item.name};${item.failed};${item.type}\n` )
+    items.forEach(item => content += `${item.machine};${time(item.start)};${time(item.end)};${format(item.duration)};${item.name};${item.failed};${item.type}\n` )
     let bom = new Uint8Array([0xEF, 0xBB, 0xBF]) // UTF-8 BOM
     let blob = new Blob([bom, content], {type: 'text/html'})
     link.style.display = 'none'

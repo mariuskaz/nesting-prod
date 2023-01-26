@@ -27,7 +27,7 @@ export default function App() {
       let data = []
       await Promise.all(
         urls.map((url, index) =>
-            fetch(url)
+            fetch(url, {cache: "no-store"})
                 .then((res) => res.text())
                 .then(text => {
                   const parser = new DOMParser()
@@ -98,8 +98,8 @@ export default function App() {
     <>
       <Sidebar change={(i)=>setView(i)} />
       <input type="date" style={date_style} value={short_date} onChange={handleChange} />
-      {view === 0 && <NestingCharts date={date} items={items} />}
-      {view === 1 && <DataTable items={items} />}
+      {view === 0 && <NestingCharts date={date} items={items} change={()=>setView(1)}/>}
+      {view === 1 && <DataTable items={items} change={()=>setView(0)} />}
     </>
   );
 }
