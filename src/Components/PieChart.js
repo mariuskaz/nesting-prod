@@ -6,7 +6,7 @@ export default function PieChart({ machine, items }) {
   const options = { legend: "none", title: "Nestingas #" + machine }
   const style = { display:'inline-block', margin:'5px' }
 
-  const filter = (item, type) => item.machine === machine && item.type === type
+  const filter = (item, type) => item.machine === machine && item.type === type && item.failed === "0"
   const duration = (total, item) => Math.round(total + item.duration)
 
   const data = [

@@ -8,7 +8,7 @@ export default function TableChart({ items }) {
   const style= { margin:'5px' }
 
   //const round2 = (num) => +(Math.round(num + "e+2")  + "e-2")
-  const filter = (item, machine, type) => item.machine === machine && item.type === type
+  const filter = (item, machine, type) => item.machine === machine && item.type === type && item.failed === "0"
   const duration = (total, item) => Math.round(total + item.duration)
 
   const data = [
@@ -28,10 +28,10 @@ export default function TableChart({ items }) {
     items.filter(item => filter(item, 2, "II darbas")).reduce(duration, 0)+":00 min",
     items.filter(item => filter(item, 3, "II darbas")).reduce(duration, 0)+":00 min",
     ],
-    [4, "Kitos programos", 
-    items.filter(item => filter(item, 1, "Kiti")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 2, "Kiti")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 3, "Kiti")).reduce(duration, 0)+":00 min",
+    [4, "Kiti darbai", 
+    items.filter(item => filter(item, 1, "Kiti darbai")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 2, "Kiti darbai")).reduce(duration, 0)+":00 min",
+    items.filter(item => filter(item, 3, "Kiti darbai")).reduce(duration, 0)+":00 min",
     ],
     [5, "Broko taisymas", 
     items.filter(item => filter(item, 1, "Brokas")).reduce(duration, 0)+":00 min",

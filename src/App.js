@@ -44,7 +44,7 @@ export default function App() {
                     duration = (new Date(end) - new Date(start)) / 1000 / 60,
                     filename = name.substring(name.lastIndexOf('\\') + 1),
                     failed = programs[item].getElementsByTagName("Interrupted")[0]?.childNodes[0].nodeValue || "0",
-                    type = "Kiti"
+                    type = "Kiti darbai"
 
                     if (regex.test(filename.substring(0, 5))) type = "Gamyba"
                     if (filename.toUpperCase().substring(0,3) === "BR-") type = "Brokas"
