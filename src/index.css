@@ -41,7 +41,7 @@ code {
 
 .side-icon:hover {
   cursor:pointer;
-  background:#eee;
+  /* background:#eee; */
   color:black;
 }
 
@@ -49,7 +49,7 @@ code {
   height:100%;
   width:50px;
   background:white;
-  color:dimgray;
+  color:gray;
   position: fixed;
   left:0px;
   text-align:center;

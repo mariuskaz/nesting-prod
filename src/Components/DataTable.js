@@ -3,25 +3,35 @@ import { Chart } from "react-google-charts";
 
 export default function DataTable({ items }) {
 
+  const cssClassNames = { 
+    headerRow:'table-header' 
+  }
+
   const options = {
     allowHtml: true,  
     title: "Programos", 
     width:'920px', 
     pageSizeee: 30, 
+    sortColumn: 0,
+    cssClassNames,
   }
 
   const style= { 
-    margin:'5px 5px 50px',
+    margin:'20px 5px 50px',
   }
 
-  const format = t => { 
+  const time = t => { 
     return new Date(t).toLocaleTimeString() 
+  }
+
+  const format = d => {
+    return new Date(d * 60 * 1000).toISOString().substring(11, 11 + 8);
   }
 
   const data = [
     ["Nest", "Startas", "Pabaiga", "Trukmė", "Programa", "Sutr.", "Programos tipas"],
       ...items.map(item => 
-        [ item.machine, format(item.start), format(item.end), item.duration, item.name, item.failed, item.type ]),
+        [ item.machine, time(item.start), time(item.end), format(item.duration), item.name, item.failed, item.type ]),
   ]
 
   function handleSave() {

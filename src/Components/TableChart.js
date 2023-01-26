@@ -11,34 +11,38 @@ export default function TableChart({ items }) {
   const filter = (item, machine, type) => item.machine === machine && item.type === type && item.failed === "0"
   const duration = (total, item) => Math.round(total + item.duration)
 
+  const format = time => {
+    return new Date(time * 60 * 1000).toISOString().substring(11, 11 + 8)
+  }
+
   const data = [
     [" ", "Veikla", "Nestingas #1", "Nestingas #2", "Nestingas #3"],
     [1, "Gamyba",
-      items.filter(item => filter(item, 1, "Gamyba")).reduce(duration, 0)+":00 min",
-      items.filter(item => filter(item, 2, "Gamyba")).reduce(duration, 0)+":00 min",
-      items.filter(item => filter(item, 3, "Gamyba")).reduce(duration, 0)+":00 min",
+    format(items.filter(item => filter(item, 1, "Gamyba")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 2, "Gamyba")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 3, "Gamyba")).reduce(duration, 0)),
     ],
     [2, "Pagalbinės programos", 
-    items.filter(item => filter(item, 1, "Pagalbinė")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 2, "Pagalbinė")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 3, "Pagalbinė")).reduce(duration, 0)+":00 min",
+    format(items.filter(item => filter(item, 1, "Pagalbinė")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 2, "Pagalbinė")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 3, "Pagalbinė")).reduce(duration, 0)),
     ],
     [3, "Antras darbas", 
-    items.filter(item => filter(item, 1, "II darbas")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 2, "II darbas")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 3, "II darbas")).reduce(duration, 0)+":00 min",
+    format(items.filter(item => filter(item, 1, "II darbas")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 2, "II darbas")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 3, "II darbas")).reduce(duration, 0)),
     ],
     [4, "Kiti darbai", 
-    items.filter(item => filter(item, 1, "Kiti darbai")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 2, "Kiti darbai")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 3, "Kiti darbai")).reduce(duration, 0)+":00 min",
+    format(items.filter(item => filter(item, 1, "Kiti darbai")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 2, "Kiti darbai")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 3, "Kiti darbai")).reduce(duration, 0)),
     ],
     [5, "Broko taisymas", 
-    items.filter(item => filter(item, 1, "Brokas")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 2, "Brokas")).reduce(duration, 0)+":00 min",
-    items.filter(item => filter(item, 3, "Brokas")).reduce(duration, 0)+":00 min",
+    format(items.filter(item => filter(item, 1, "Brokas")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 2, "Brokas")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 3, "Brokas")).reduce(duration, 0)),
     ],
-    [null, "Prastova",  0+":00 min", 0+":00 min", 0+":00 min"],
+    [null, "Prastova",  "00:00:00", "00:00:00", "00:00:00"],
   ]
 
   const formatters = [

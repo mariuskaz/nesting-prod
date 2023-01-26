@@ -91,7 +91,7 @@ export default function App() {
 
   const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
   const date_style = {
-    padding:'4px', margin:'10px 10px 0', border:'1px solid lightgray'
+    padding:'4px', margin:'10px 10px 0', border:'1px solid lightgray', background:'white',
   }
   
   return (
