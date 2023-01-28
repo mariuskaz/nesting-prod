@@ -15,7 +15,7 @@ export default function PieChart({ machine, items }) {
     ["Brokas", items.filter(item => filter(item, "Brokas")).reduce(duration, 0)],
     ["Pagalbinės", items.filter(item => filter(item, "Pagalbinė")).reduce(duration, 0)],
     ["II darbas", items.filter(item => filter(item, "II darbas")).reduce(duration, 0)],
-    ["Kitos", items.filter(item => filter(item, "Kiti")).reduce(duration, 0)],
+    ["Kiti darbai", items.filter(item => filter(item, "Kiti darbai")).reduce(duration, 0)],
     ["Prastova", 0],
   ]
 
