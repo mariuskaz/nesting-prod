@@ -21,7 +21,7 @@ export default function DataTable({ items }) {
   }
 
   const time = t => { 
-    return new Date(t).toLocaleTimeString() 
+    return new Date(t).toLocaleTimeString("lt-LT") 
   }
 
   const format = d => {

@@ -22,9 +22,24 @@ export default function ColumnChart({ title, items }) {
   const qty = sheets.reduce((total, qty) => total + qty, 0)
   
   const options = {
+
     legend: "none", 
     title: title + " (" + qty + " lap.)",
-    vAxis: { format: '0', viewWindow: { min: 0, max: maximum < 15 ? 15 : maximum } }
+
+    vAxis: { 
+      format: '0', 
+      viewWindow: { 
+        min: 0, 
+        max: maximum < 15 ? 15 : maximum 
+      } 
+    },
+
+    animation: {
+      duration: 1000,
+      easing: "out",
+      /* startup: true, */
+    },
+    
   }
   
   const header =  [["Nestingas", "Lapai", { role: 'annotation' }, { role: "style" }]]

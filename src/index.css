@@ -20,10 +20,11 @@ code {
 }
 
 .table-header {
+  background: #eee;
   font-family: Courier, monospace;
   font-weight:200;
   font-size: small;
-  height:30px;
+  height:32px;
 }
 
 .material-symbols-outlined {

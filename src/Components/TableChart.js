@@ -5,9 +5,8 @@ export default function TableChart({ items }) {
 
   const cssClassNames = { headerRow:'table-header' }
   const options = { title: "Programos", width:'920px', allowHtml: true, cssClassNames }
-  const style= { margin:'5px' }
+  const style= { margin:'5px 5px 20px' }
 
-  //const round2 = (num) => +(Math.round(num + "e+2")  + "e-2")
   const filter = (item, machine, type) => item.machine === machine && item.type === type && item.failed === "0"
   const duration = (total, item) => Math.round(total + item.duration)
 
