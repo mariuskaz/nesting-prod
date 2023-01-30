@@ -7,6 +7,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-y: scroll;
 }
 
 code {
@@ -35,38 +36,20 @@ code {
   'opsz' 48
 }
 
-.side-icon {
-  padding:10px;
-  font-size: xx-large;
-}
-
-.side-icon:hover {
-  cursor:pointer;
-  /* background:#eee; */
-  color:black;
-}
-
-.sidebar {
-  height:100%;
-  width:50px;
-  background:white;
-  color:gray;
-  position: fixed;
-  left:0px;
-  text-align:center;
-  font-size:large;
-  z-index: 999;
-}
-
 .action-button {
-  float:right;
+  position:fixed;
   margin:3px 10px;
-  padding:7px;
+  padding:14px;
   background:white;
   border:1px solid lightgray;
   border-radius:2px;
   color:gray;
   cursor:pointer;
+  right:30px;
+  bottom:30px;
+  border-radius:30px;
+  font-size: xx-large;
+  box-shadow: 0 0 5px gray;
 }
 
 .action-button:hover {
@@ -75,9 +58,30 @@ code {
   color:black;
 }
 
+nav {
+  margin:0 10px;
+  user-select: none;
+}
+
+.menu-icon {
+  background:white;
+  padding:8px 40px;
+  font-size: 20pt;
+  margin:2px 1px 0;
+  border-bottom:3px solid lightgray;
+  color:lightgray;
+}
+
+.menu-icon:hover {
+  color:#2ad;
+  cursor:pointer;
+}
+
+.menu-icon-active {
+  border-bottom:3px solid #2ad;
+  color:#2ad;
+}
+
 @media screen and (max-device-width: 800px) {
-  .sidebar {
-    height:auto;
-    top:40vh;
-  }
+
 }

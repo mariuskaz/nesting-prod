@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import NestingCharts from "./Components/NestingCharts"
-import Sidebar from "./Components/Sidebar"
 import DataTable from "./Components/DataTable"
 
 const locations = [
@@ -47,10 +46,10 @@ export default function App() {
                     type = "Kiti darbai"
 
                     if (regex.test(filename.substring(0, 5))) type = "Gamyba"
-                    if (filename.toUpperCase().substring(0,3) === "BR-") type = "Brokas"
                     if (filename.toUpperCase().includes("CINAVIM")) type = "Pagalbinė"
                     if (filename.toUpperCase().includes("NUTRAUKIM")) type = "Pagalbinė"
-                    if (filename.includes("_J1C") || filename.includes("_J2C")) type="II darbas"
+                    if (filename.toUpperCase().substring(0,3) === "BR-") type = "Brokas"
+                    else if (filename.includes("_J1C") || filename.includes("_J2C")) type="II darbas"
 
                     //console.log(filename, duration)
                     if (name.length > 0) data.push({ machine, name, start, end, duration, failed, type })
@@ -91,15 +90,24 @@ export default function App() {
 
   const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
   const date_style = {
-    padding:'4px', margin:'10px 10px 0', border:'1px solid lightgray', background:'white',
+    padding:'4px', margin:'10px 0px', border:'1px solid lightgray', background:'white', float:'right',
   }
   
   return (
     <>
-      <Sidebar change={(i)=>setView(i)} />
-      <input type="date" style={date_style} value={short_date} onChange={handleChange} />
-      {view === 0 && <NestingCharts date={date} items={items} change={()=>setView(1)}/>}
-      {view === 1 && <DataTable items={items} change={()=>setView(0)} />}
+      <nav>
+        <div 
+          className={`material-symbols-sharp menu-icon ${view === 0 ? "menu-icon-active" : ""}`} 
+          onClick={()=>setView(0)}>leaderboard</div>
+        <div 
+          className={`material-symbols-sharp menu-icon ${view === 1 ? "menu-icon-active" : ""}`} 
+          onClick={()=>setView(1)}>text_snippet</div>
+        <input type="date" style={date_style} value={short_date} onChange={handleChange} />
+      </nav>
+      <main>
+        {view === 0 && <NestingCharts date={date} items={items} change={()=>setView(1)}/>}
+        {view === 1 && <DataTable items={items} change={()=>setView(0)} />}
+      </main>
     </>
   );
 }
