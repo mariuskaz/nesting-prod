@@ -43,9 +43,9 @@ export default function DataTable({ items }) {
 
   function handleSave() {
     console.log('download file')
-    let content = "Nestingas;Startas;Pabaiga;Trukmė;Programa;Sutrikimai;Programos tipas\n"
+    let content = "Nestingas;Startas;Pabaiga;Trukmė;Programa;Sutrikimai;Programos tipas;Medžiaga\n"
     let link = document.createElement('a')
-    items.forEach(item => content += `${item.machine};${time(item.start)};${time(item.end)};${format(item.duration)};${item.name};${item.failed};${item.type}\n` )
+    items.forEach(item => content += `${item.machine};${time(item.start)};${time(item.end)};${format(item.duration)};${item.name};${item.failed};${item.type};${item.material}\n` )
     let bom = new Uint8Array([0xEF, 0xBB, 0xBF]) // UTF-8 BOM
     let blob = new Blob([bom, content], {type: 'text/html'})
     link.style.display = 'none'
