@@ -10,11 +10,6 @@ body {
   overflow-y: scroll;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 #root {
   margin:auto;
   width:940px;
@@ -24,7 +19,7 @@ code {
   background: #eee;
   font-family: Courier, monospace;
   font-weight:200;
-  font-size: small;
+  font-size: 9pt;
   height:32px;
 }
 
@@ -36,34 +31,12 @@ code {
   'opsz' 48
 }
 
-.action-button {
-  position:fixed;
-  margin:3px 10px;
-  padding:14px;
-  background:white;
-  border:1px solid lightgray;
-  border-radius:2px;
-  color:gray;
-  cursor:pointer;
-  right:30px;
-  bottom:30px;
-  border-radius:30px;
-  font-size: xx-large;
-  box-shadow: 0 0 5px gray;
-}
-
-.action-button:hover {
-  background:#eee;
-  border:1px solid gray;
-  color:black;
-}
-
 nav {
   margin:0 10px;
   user-select: none;
 }
 
-.menu-icon {
+.tab-icon {
   background:white;
   padding:8px 40px;
   font-size: 18pt;
@@ -72,14 +45,20 @@ nav {
   color:lightgray;
 }
 
-.menu-icon:hover {
+.tab-icon:hover {
   color:#2ad;
   cursor:pointer;
 }
 
-.menu-icon-active {
+.tab-icon-active {
   border-bottom:3px solid #2ad;
   color:#2ad;
+}
+
+.simple-button {
+  padding:5px 20px; 
+  margin:5px 10px 50px;
+  float:right;
 }
 
 @media screen and (max-device-width: 800px) {

@@ -97,10 +97,10 @@ export default function App() {
     <>
       <nav>
         <div 
-          className={`material-symbols-sharp menu-icon ${view === 0 ? "menu-icon-active" : ""}`} 
+          className={`material-symbols-sharp tab-icon ${view === 0 ? "tab-icon-active" : ""}`} 
           onClick={()=>setView(0)}>leaderboard</div>
         <div 
-          className={`material-symbols-sharp menu-icon ${view === 1 ? "menu-icon-active" : ""}`} 
+          className={`material-symbols-sharp tab-icon ${view === 1 ? "tab-icon-active" : ""}`} 
           onClick={()=>setView(1)}>text_snippet</div>
         <input type="date" style={date_style} value={short_date} onChange={handleChange} />
       </nav>

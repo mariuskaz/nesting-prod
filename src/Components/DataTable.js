@@ -17,7 +17,7 @@ export default function DataTable({ items }) {
   }
 
   const style= { 
-    margin:'10px 5px 50px',
+    margin:'10px 5px 2px',
   }
 
   const time = t => { 
@@ -51,13 +51,16 @@ export default function DataTable({ items }) {
 
   return (
     <>
-      <div className="material-symbols-sharp action-button" onClick={handleSave}>save</div>
       <Chart
         chartType="Table"
         data={data}
         options={options}
         style={style}
       />
+      <button 
+        className="simple-button" 
+        onClick={handleSave}
+      >Excel</button>
     </>
 
   );
