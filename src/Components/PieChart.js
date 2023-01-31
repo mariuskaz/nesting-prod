@@ -25,7 +25,7 @@ export default function PieChart({ machine, items }) {
       data={data}
       options={options}
       style={style}
-      width={"300px"}
+      width={"307px"}
       height={"280px"}
     />
   )

@@ -4,7 +4,7 @@ import { Chart } from "react-google-charts";
 export default function TableChart({ items }) {
 
   const cssClassNames = { headerRow:'table-header' }
-  const options = { title: "Programos", width:'920px', allowHtml: true, cssClassNames }
+  const options = { title: "Programos", width:'940px', allowHtml: true, cssClassNames }
   const style= { margin:'5px 5px 20px' }
 
   const filter = (item, machine, type) => item.machine === machine && item.type === type && item.failed === "0"
