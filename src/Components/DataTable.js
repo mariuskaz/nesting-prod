@@ -10,7 +10,7 @@ export default function DataTable({ items }) {
   const options = {
     allowHtml: true,  
     title: "Programos", 
-    width:'920px', 
+    width:'940px', 
     /* pageSize: 40, */
     sortColumn: 0,
     cssClassNames,
@@ -29,9 +29,16 @@ export default function DataTable({ items }) {
   }
 
   const data = [
-    ["Nest", "Startas", "Pabaiga", "Trukmė", "Programa", "Sutr.", "Programos tipas"],
-      ...items.map(item => 
-        [ item.machine, time(item.start), time(item.end), format(item.duration), item.name, item.failed, item.type ]),
+    ["Nest", "Startas", "Pabaiga", "Trukmė", "Programa", "Sutr.", "Programos tipas", "Medžiaga"],
+      ...items.map(item => [ 
+        item.machine, 
+        time(item.start), 
+        time(item.end), 
+        format(item.duration), 
+        item.name.substring(item.name.lastIndexOf('\\') + 1), 
+        item.failed, item.type, 
+        item.material 
+      ]),
   ]
 
   function handleSave() {

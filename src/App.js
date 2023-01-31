@@ -43,7 +43,8 @@ export default function App() {
                     duration = (new Date(end) - new Date(start)) / 1000 / 60,
                     filename = name.substring(name.lastIndexOf('\\') + 1),
                     failed = programs[item].getElementsByTagName("Interrupted")[0]?.childNodes[0].nodeValue || "0",
-                    type = "Kiti darbai"
+                    type = "Kiti darbai",
+                    material = programs[item].getAttribute('Product') || ""
 
                     if (regex.test(filename.substring(0, 5))) type = "Gamyba"
                     if (filename.toUpperCase().includes("CINAVIM")) type = "Pagalbinė"
@@ -52,7 +53,7 @@ export default function App() {
                     else if (filename.includes("_J1C") || filename.includes("_J2C")) type="II darbas"
 
                     //console.log(filename, duration)
-                    if (name.length > 0) data.push({ machine, name, start, end, duration, failed, type })
+                    if (name.length > 0) data.push({ machine, name, start, end, duration, failed, type, material })
                   }
 
                 })

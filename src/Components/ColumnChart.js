@@ -43,6 +43,6 @@ export default function ColumnChart({ title, items }) {
   const data = [...header, ...rows]
 
   return (
-    <Chart chartType="ColumnChart" width="920px" height="400px" data={data} options={options} style={style} />
+    <Chart chartType="ColumnChart" width="940px" height="400px" data={data} options={options} style={style} />
   )
 }
