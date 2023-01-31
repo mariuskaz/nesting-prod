@@ -1,7 +1,7 @@
 import React from 'react'
 import { Chart } from "react-google-charts"
 
-const style = { padding:"5px" }
+const style = { padding:"0 5px 5px" }
 const blue_color = "color:rgb(51, 102, 204)"
 
 export default function ColumnChart({ title, items }) {

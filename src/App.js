@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import NestingCharts from "./Components/NestingCharts"
 import DataTable from "./Components/DataTable"
+import Sidebar from "./Components/Sidebar"
 
 const locations = [
   "http://192.168.100.102/nesting/snovar%2001/tpaprod/",
@@ -65,7 +66,7 @@ export default function App() {
       setSynced(true)
 
       const time = new Date().toLocaleTimeString()
-      console.log(time, 'completed items:', data.length)
+      console.log(time, 'items counted:', data.length)
 
     }
 
@@ -91,24 +92,17 @@ export default function App() {
 
   const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
   const date_style = {
-    padding:'4px', margin:'10px 0px', border:'1px solid lightgray', background:'white', float:'right',
+    padding:'4px', margin:'10px', border:'1px solid lightgray', background:'white',
   }
   
+  // https://fonts.google.com/icons?icon.query=data&icon.set=Material+Symbols
+
   return (
     <>
-      <nav>
-        <div 
-          className={`material-symbols-sharp tab-icon ${view === 0 ? "tab-icon-active" : ""}`} 
-          onClick={()=>setView(0)}>leaderboard</div>
-        <div 
-          className={`material-symbols-sharp tab-icon ${view === 1 ? "tab-icon-active" : ""}`} 
-          onClick={()=>setView(1)}>text_snippet</div>
-        <input type="date" style={date_style} value={short_date} onChange={handleChange} />
-      </nav>
-      <main>
-        {view === 0 && <NestingCharts date={date} items={items} change={()=>setView(1)}/>}
-        {view === 1 && <DataTable items={items} change={()=>setView(0)} />}
-      </main>
+      <Sidebar view={view} change={(i)=>setView(i)} />
+      <input type="date" style={date_style} value={short_date} onChange={handleChange} />
+      {view === 0 && <NestingCharts date={date} items={items} change={()=>setView(1)}/>}
+      {view === 1 && <DataTable items={items} change={()=>setView(0)} />}
     </>
   );
 }

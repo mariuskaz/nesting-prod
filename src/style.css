@@ -15,13 +15,19 @@ body {
   width: 960px;
 }
 
-.table-header {
-  background: #eee;
-  font-family: Courier, monospace;
-  font-weight:200;
-  font-size: 9pt;
-  height:32px;
+nav {
+  user-select: none;
+  background:whitesmoke;
+  margin:0 10px;
+  /* position:fixed;
+  top:0;
+  width:940px;
+  z-index: 9999; */
 }
+
+/* main {
+  margin-top: 56px;
+} */
 
 .material-symbols-outlined {
   font-variation-settings:
@@ -29,11 +35,6 @@ body {
   'wght' 400,
   'GRAD' 200,
   'opsz' 48
-}
-
-nav {
-  margin:0 10px;
-  user-select: none;
 }
 
 .tab-icon {
@@ -55,12 +56,67 @@ nav {
   color:#2ad;
 }
 
+.sidebar {
+  height:100%;
+  width:52px;
+  background:white;
+  color:gray;
+  position: fixed;
+  left:0px;
+  text-align:center;
+  font-size:large;
+  z-index: 999;
+  user-select: none;
+}
+
+.side-icon {
+  cursor:pointer;
+  font-size: xx-large;
+  padding:10px;
+}
+
+.side-icon:hover {
+  color:#2ad;
+}
+
+.side-icon-active {
+  color:#2ad;
+  border-right:2px solid #2AD;
+}
+
+.table-header {
+  background: #eee;
+  font-family: Courier, monospace;
+  font-weight:200;
+  font-size: 9pt;
+  height:32px;
+}
+
 .simple-button {
-  padding:5px 20px; 
-  margin:5px 10px 50px;
+  padding:8px 30px; 
+  margin:15px 10px 40px;
   float:right;
 }
 
-@media screen and (max-device-width: 800px) {
+.action-button {
+  float:right;
+  margin:3px 10px;
+  padding:7px;
+  background:white;
+  border:1px solid lightgray;
+  border-radius:2px;
+  color:gray;
+  cursor:pointer;
+}
 
+.action-button:hover {
+  background:#eee;
+  border:1px solid gray;
+  color:black;
+}
+
+@media screen and (max-device-width: 800px) {
+ body, html {
+  margin-left:30px;
+ }
 }
