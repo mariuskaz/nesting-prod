@@ -100,8 +100,8 @@ nav {
 
 .action-button {
   float:right;
-  margin:4px 10px 3px;
-  padding:7px;
+  margin:4px 10px;
+  padding:5px 12px 5px 5px;
   background:#fff;
   border:1px solid #ddd;
   border-radius:2px;
@@ -115,11 +115,12 @@ nav {
 }
 
 .button-text {
-  vertical-align:middle;
+  vertical-align:top;
+  color:black;
 }
 
 .green {
-  color:green;
+  color:darkgreen;
 }
 
 .label {
@@ -136,9 +137,9 @@ nav {
   background:white;
   font-size:10pt;
   font-family:Verdana, Geneva, Tahoma, sans-serif;
-  margin:4px 10px 3px;
+  margin:0px 10px 3px;
   padding:10px;
-  display:inline-block;
+  ddisplay:inline-block;
 }
 
 @media screen and (max-device-width: 800px) {

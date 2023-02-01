@@ -16,7 +16,7 @@ export default function DataTable({ title, items }) {
   }
 
   const style= { 
-    margin:'2px 5px 50px',
+    margin:'2px 5px 10px',
   }
 
   const time = t => { 
@@ -58,7 +58,10 @@ export default function DataTable({ title, items }) {
 
   return (
     <>
-      <div className="material-symbols-sharp action-button" onClick={handleSave}>save</div>
+      <div className="action-button" onClick={handleSave}>
+        <i className="material-symbols-sharp button-text green">save</i>
+        <span className="button-text">&nbsp;Excel</span>
+      </div>
       <div className="header">{title.toUpperCase()}<span className="label">{items.length}</span></div>
       <Chart
         chartType="Table"
@@ -66,6 +69,7 @@ export default function DataTable({ title, items }) {
         options={options}
         style={style}
       />
+      
     </>
   );
 }
