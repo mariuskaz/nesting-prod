@@ -100,19 +100,45 @@ nav {
 
 .action-button {
   float:right;
-  margin:3px 10px;
+  margin:4px 10px 3px;
   padding:7px;
-  background:white;
-  border:1px solid lightgray;
+  background:#fff;
+  border:1px solid #ddd;
   border-radius:2px;
-  color:gray;
+  color:#999;
   cursor:pointer;
+  vertical-align:middle;
 }
 
 .action-button:hover {
   background:#eee;
-  border:1px solid gray;
+}
+
+.button-text {
+  vertical-align:middle;
+}
+
+.green {
+  color:green;
+}
+
+.label {
+  color:gray;
+  font-size: small;
+  background:#fafafa;
+  padding:4px 5px;
+  border-radius:4px;
+  margin-left: 7px;
+}
+
+.header {
   color:black;
+  background:white;
+  font-size:10pt;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  margin:4px 10px 3px;
+  padding:10px;
+  display:inline-block;
 }
 
 @media screen and (max-device-width: 800px) {
