@@ -100,7 +100,7 @@ nav {
 
 .action-button {
   float:right;
-  margin:4px 10px;
+  margin:5px 10px;
   padding:5px 12px 5px 5px;
   background:#fff;
   border:1px solid #ddd;
@@ -112,6 +112,7 @@ nav {
 
 .action-button:hover {
   background:#eee;
+  border-color:gray;
 }
 
 .button-text {
