@@ -18,6 +18,10 @@ export default function Sidebar({ view, change }) {
                 className={`material-symbols-sharp side-icon ${view === 2 ? 'side-icon-active' : ''}`}
                 onClick={()=>change(2)}
             >warning</div>
+            <div
+                className={`material-symbols-sharp side-icon ${view === 3 ? 'side-icon-active' : ''} bottom`}
+                onClick={()=>change(3)}
+            >settings</div>
         </div>
     )
 }

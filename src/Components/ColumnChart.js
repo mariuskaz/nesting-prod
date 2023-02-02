@@ -31,10 +31,15 @@ export default function ColumnChart({ title, items }) {
     },
     
   }
+
+  /* const duration = (total, item) => format(Math.round(total + item.duration))
+  const format = d => {
+    return new Date(d * 60 * 1000).toISOString().substring(11, 11 + 8) || "00:00:00";
+  } */
   
   const header =  [["Nestingas", "Lapai", { role: 'annotation' }, { role: "style" }]]
   const rows = machines.map( machine => [
-    "Nestingas #" + machine, 
+    "Nestingas #" + machine, // + "\n\n" + items.filter(item => item.machine === machine && item.type === "Power state").reduce(duration, 0), 
     items.filter(item => item.machine === machine && item.type === "Gamyba" && item.failed === "0").length, 
     items.filter(item => item.machine === machine && item.type === "Gamyba" && item.failed === "0").length + " lapai", 
     blue_color

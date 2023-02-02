@@ -7,7 +7,7 @@ export default function TableChart({ items }) {
   const options = { title: "Programos", width:'940px', allowHtml: true, cssClassNames }
   const style= { margin:'5px 5px 20px' }
 
-  const filter = (item, machine, type) => item.machine === machine && item.type === type && item.failed === "0"
+  const filter = (item, machine, type) => item.machine === machine && item.type === type && item.failed !== "1"
   const duration = (total, item) => Math.round(total + item.duration)
 
   const format = time => {
@@ -41,7 +41,11 @@ export default function TableChart({ items }) {
     format(items.filter(item => filter(item, 2, "Brokas")).reduce(duration, 0)),
     format(items.filter(item => filter(item, 3, "Brokas")).reduce(duration, 0)),
     ],
-    [null, "Prastova",  "00:00:00", "00:00:00", "00:00:00"],
+    [6, "Prastova",  
+    format(items.filter(item => filter(item, 1, "Idle time")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 2, "Idle time")).reduce(duration, 0)),
+    format(items.filter(item => filter(item, 3, "Idle time")).reduce(duration, 0)),
+    ],
   ]
 
   const formatters = [
@@ -57,6 +61,7 @@ export default function TableChart({ items }) {
         [2, 4, "#109618", "#109618"],
         [3, 5, "#990099", "#990099"],
         [4, 6, "#DC3912", "#DC3912"],
+        [5, 7, "#DDD", "#DDD"],
       ],
     },
   ];

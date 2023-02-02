@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import NestingCharts from "./Components/NestingCharts"
 import DataTable from "./Components/DataTable"
 import Sidebar from "./Components/Sidebar"
+import CheckBox from "./Components/CheckBox"
 
 const locations = [
   "http://192.168.100.102/nesting/snovar%2001/tpaprod/",
@@ -14,6 +15,7 @@ export default function App() {
   const [ date, setDate ] = useState(new Date())
   const [ items, setItems ] = useState([])
   const [ view, setView ] = useState(0)
+  const [ stats, setStats ] = useState(false)
 
   useEffect(() => {
 
@@ -32,13 +34,27 @@ export default function App() {
                 .then(text => {
                   const parser = new DOMParser()
                   const xml = parser.parseFromString(text, "application/xml")
-                  //const power = xml.getElementsByTagName("Start")[0]?.childNodes[0].nodeValue
+                  const powerStarts = xml.getElementsByTagName("Start")
+                  const powerEnds = xml.getElementsByTagName("End")
+
+                  const machine = index + 1, name = "Nestingas #" + machine,
+                  start = powerStarts[1]?.childNodes[0].nodeValue || "",
+                  end = powerEnds[powerEnds.length - 1]?.childNodes[0].nodeValue || "", 
+                  duration = (new Date(end) - new Date(start)) / 1000 / 60,
+                  failed = "220",
+                  type = "Power on/off",
+                  material = ""
+
+                  if (powerStarts.length > 0 && stats)
+                    data.push({ machine, name, start, end, duration, failed, type, material })
+                  
+
                   const programs = xml.getElementsByTagName("Program")
                   const regex = /^\d{4}-$/
+                  let idle = duration
 
                   for (let item = 0; item < programs.length; item++) {
-                    let machine = index + 1,
-                    name = programs[item].getElementsByTagName("Name")[0]?.childNodes[0].nodeValue || "",
+                    let name = programs[item].getElementsByTagName("Name")[0]?.childNodes[0].nodeValue || "",
                     start = programs[item].getElementsByTagName("Start")[0]?.childNodes[0].nodeValue || "",
                     end = programs[item].getElementsByTagName("End")[0]?.childNodes[0].nodeValue || "",
                     duration = (new Date(end) - new Date(start)) / 1000 / 60,
@@ -53,9 +69,12 @@ export default function App() {
                     if (filename.toUpperCase().substring(0,3) === "BR-") type = "Brokas"
                     else if (filename.includes("_J1C") || filename.includes("_J2C")) type="II darbas"
 
-                    //console.log(filename, duration)
                     if (name.length > 0) data.push({ machine, name, start, end, duration, failed, type, material })
+                    idle -= duration
                   }
+
+                  if (powerStarts.length > 0 && stats)
+                    data.push({ machine, name, start:"", end:"", duration: idle, failed: "220", type: "Idle time", material })
 
                 })
                 .catch(err => console.log)
@@ -66,7 +85,7 @@ export default function App() {
       setSynced(true)
 
       const time = new Date().toLocaleTimeString()
-      console.log(time, 'items counted:', data.length)
+      console.log(time, 'results:', data.length)
 
     }
 
@@ -80,7 +99,7 @@ export default function App() {
 
     return () => clearInterval(refresh)
 
-  }, [synced, date, items])
+  }, [synced, date, items, stats])
 
   function handleChange(e) {
     if (e.target.value.length) {
@@ -90,12 +109,17 @@ export default function App() {
     }
   }
 
-  const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
+  function handleStats() {
+    setStats(value => !value)
+    setSynced(false)
+  }
+
+  const short_date = 
+    new Intl.DateTimeFormat('lt-LT').format(date)
+
   const date_style = {
     padding:'4px', margin:'10px', border:'1px solid lightgray', background:'white',
   }
-  
-  // https://fonts.google.com/icons?icon.query=data&icon.set=Material+Symbols
 
   return (
     <>
@@ -104,6 +128,8 @@ export default function App() {
       {view === 0 && <NestingCharts date={date} items={items} />}
       {view === 1 && <DataTable title={"Paleistos programos"} items={items.filter(item => item.failed === "0")} />}
       {view === 2 && <DataTable title={"Sutrikimai"} items={items.filter(item => item.failed === "1")} />}
+      {view === 3 && <DataTable title={"Staklių įjungimas/išjungimas"} items={items.filter(item => item.failed === "220")} />}
+      {view === 3 && <CheckBox label={'Įtraukti staklių prastovas į rodiklius'} value={stats} onChange={handleStats} /> }
     </>
   );
 }

@@ -20,11 +20,12 @@ export default function DataTable({ title, items }) {
   }
 
   const time = t => { 
-    return new Date(t).toLocaleTimeString("lt-LT") 
+    if (t.length > 0) return new Date(t).toLocaleTimeString("lt-LT")
+    return ""
   }
 
   const format = d => {
-    return new Date(d * 60 * 1000).toISOString().substring(11, 11 + 8);
+    return new Date(d * 60 * 1000).toISOString().substring(11, 11 + 8) || "00:00:00";
   }
 
   const data = [
