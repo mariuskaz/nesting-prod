@@ -61,7 +61,7 @@ export default function DataTable({ title, items }) {
     <>
       <div className="action-button" onClick={handleSave}>
         <i className="material-symbols-sharp button-text green">save</i>
-        <span className="button-text green">&nbsp;Excel</span>
+        <span className="button-text">&nbsp;Excel</span>
       </div>
       <div className="header">{title.toUpperCase()}<span className="label">{items.length}</span></div>
       <Chart

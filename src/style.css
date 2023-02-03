@@ -67,6 +67,7 @@ nav {
   font-size:large;
   z-index: 999;
   user-select: none;
+  box-shadow: 0 0 5px gray;
 }
 
 .side-icon {
@@ -81,7 +82,7 @@ nav {
 
 .side-icon-active {
   color:#2ad;
-  border-right:2px solid #2AD;
+  border-right:3px solid #2AD;
 }
 
 .table-header {
