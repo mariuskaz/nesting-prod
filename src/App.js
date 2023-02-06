@@ -15,7 +15,7 @@ export default function App() {
   const [ date, setDate ] = useState(new Date())
   const [ items, setItems ] = useState([])
   const [ view, setView ] = useState(0)
-  const [ stats, setStats ] = useState(false)
+  const [ params, setParams ] = useState({ calcIdle: true })
 
   useEffect(() => {
 
@@ -45,7 +45,7 @@ export default function App() {
                   type = "Power on/off",
                   material = ""
 
-                  if (powerStarts.length > 0 && stats)
+                  if (powerStarts.length > 0 && params.calcIdle)
                     data.push({ machine, name, start, end, duration, failed, type, material })
                   
 
@@ -73,7 +73,7 @@ export default function App() {
                     idle -= duration
                   }
 
-                  if (powerStarts.length > 0 && stats)
+                  if (powerStarts.length > 0 && params.calcIdle)
                     data.push({ machine, name, start:"", end:"", duration: idle, failed: "220", type: "Idle time", material })
 
                 })
@@ -99,7 +99,7 @@ export default function App() {
 
     return () => clearInterval(refresh)
 
-  }, [synced, date, items, stats])
+  }, [synced, date, items, params])
 
   function handleChange(e) {
     if (e.target.value.length) {
@@ -109,8 +109,10 @@ export default function App() {
     }
   }
 
-  function handleStats() {
-    setStats(value => !value)
+  function toggleIdle() {
+    setParams(values => { 
+      return { ...values, calcIdle: !values.calcIdle }
+    })
     setSynced(false)
   }
 
@@ -128,9 +130,9 @@ export default function App() {
       {view === 0 && <NestingCharts date={date} items={items} />}
       {view === 1 && <DataTable title={"Paleistos programos"} items={items.filter(item => item.failed === "0")} />}
       {view === 2 && <DataTable title={"Sutrikimai"} items={items.filter(item => item.failed === "1")} />}
-      {view === 3 && <DataTable title={"Staklių įjungimas/išjungimas"} items={items.filter(item => item.failed === "220")} />}
       {view === 3 && <div className="header">PARAMETRAI</div>}
-      {view === 3 && <CheckBox label={'Įtraukti staklių prastovas į rodiklius'} value={stats} onChange={handleStats} /> }
+      {view === 3 && <CheckBox label={'Įtraukti staklių prastovas į rodiklius'} value={params.calcIdle} onChange={toggleIdle} /> }
+      {view === 3 && <DataTable title={"Staklių įjungimas/išjungimas"} items={items.filter(item => item.failed === "220")} />}
     </>
   );
 }
