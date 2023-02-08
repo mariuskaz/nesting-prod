@@ -6,16 +6,19 @@ export default function DataTable({ title, items }) {
   const [ filteredItems, setFilteredItems ] = useState(items)
   const [ machine, setMachine ] = useState(0)
   const [ type, setType ] = useState("all")
+  const [ name, setName ] = useState("")
 
   useEffect(() => {
     setFilteredItems(() => {
       return items.filter(item => {
         const currentMachine = machine === 0 ? true : item.machine === machine
         const currentType = type === "all" ? true : item.type === type
-        return currentMachine && currentType
+        const currentName = name === "" ? true : item.name.includes(name)
+        return currentMachine && currentType && currentName
       })
+      console.log(name)
     })
-  }, [items, machine, type])
+  }, [items, machine, type, name])
   
 
   const cssClassNames = { 
@@ -60,7 +63,7 @@ export default function DataTable({ title, items }) {
     console.log('download file')
     let content = "Nestingas;Startas;Pabaiga;Trukmė;Programa;Programos tipas;Medžiaga\n"
     let link = document.createElement('a')
-    items.forEach(item => content += `${item.machine};${time(item.start)};${time(item.end)};${format(item.duration)};${item.name};${item.type};${item.material}\n` )
+    filteredItems.forEach(item => content += `${item.machine};${time(item.start)};${time(item.end)};${format(item.duration)};${item.name};${item.type};${item.material}\n` )
     let bom = new Uint8Array([0xEF, 0xBB, 0xBF]) // UTF-8 BOM
     let blob = new Blob([bom, content], {type: 'text/html'})
     link.style.display = 'none'
@@ -101,11 +104,11 @@ export default function DataTable({ title, items }) {
     )
   }
 
-  function Text({ label }) {
+  function Text({ label, value, change }) {
     return (
       <div className="block">
         <div className="small gray">{label}</div>
-        <input type="search" className="long" />
+        <input defaultValue={value} type="search" className="long" onChange={(e)=>handleName(e)}/>
       </div>
     )
   }
@@ -127,22 +130,26 @@ export default function DataTable({ title, items }) {
     setType(e.target.value)
   }
 
+  function handleName(e) {
+    if (e.key === "Enter") setName(e.target.value)
+  }
+
   return (
     <>
       <button className="button float" onClick={handleSave}>
         <i className="material-symbols-outlined green">save</i>
-        <span>Save</span>
       </button>
 
       <div className="box">
         {!expanded && <i className="material-symbols-outlined float" onClick={()=>setExpanded(true)}>expand_more</i>}
         {expanded && <i className="material-symbols-outlined float" onClick={()=>setExpanded(false)}>expand_less</i>}
-        <p>{title.toUpperCase()}<span className="label">{filteredItems.length}</span></p>
+        <p className="bold">{title.toUpperCase()}<span className="label">{filteredItems.length}</span></p>
         {expanded && 
         <div className="filters">
           <Nesting value={machine} onChange={(e) => handleMachine(e)} /> 
-          <Time label={'Startas'} /> <Time label={'Pabaiga'} /> 
-          <Text label={'Programos pavadinimas'} /> 
+          <Time label={'Startas'} /> 
+          <Time label={'Pabaiga'} /> 
+          <Text label={'Programos pavadinimas'} value={name} onChange={(e)=>handleName(e)} /> 
           <Type value={type} onChange={(e) => handleType(e)} /> 
           <Text label={'Medžiaga'} />
         </div>}

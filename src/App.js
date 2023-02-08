@@ -128,7 +128,7 @@ export default function App() {
       <Sidebar view={view} change={(i)=>setView(i)} />
       <input type="date" style={date_style} value={short_date} onChange={handleChange} /> 
       {view === 0 && <NestingCharts date={date} items={items} />}
-      {view === 1 && <DataTable title={"Paleistos programos"} items={items.filter(item => item.failed === "0")} />}
+      {view === 1 && <DataTable title={"Įvykdytos programos"} items={items.filter(item => item.failed === "0")} />}
       {view === 2 && <DataTable title={"Sutrikimai"} items={items.filter(item => item.failed === "1")} />}
       {view === 3 && <div className="box">
         <p>PARAMETRAI</p>
