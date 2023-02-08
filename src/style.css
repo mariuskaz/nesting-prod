@@ -89,6 +89,11 @@ nav {
   color:darkgreen;
 }
 
+.gray {
+  color:#999;
+  color:#888;
+}
+
 .bottom {
   position:fixed;
   left:0;
@@ -104,17 +109,18 @@ nav {
   margin-left: 7px;
 }
 
-input[type="checkbox"], input[type="radio"] {
-  filter: hue-rotate(340deg);
-}
-
 .box {
   color:black;
   background:white;
   font-size:10pt;
   font-family:Verdana, Geneva, Tahoma, sans-serif;
   margin:0px 10px 3px;
-  padding:5px;
+  padding:1px 10px 1px;
+  min-height:30px;
+}
+
+.box span {
+  margin-top:10px;
 }
 
 .header {
@@ -129,8 +135,19 @@ input[type="checkbox"], input[type="radio"] {
   padding:5px;
 }
 
-.right {
+.header .right {
   margin-left: auto;
+}
+
+.float {
+  float:right;
+  margin:8px 10px;
+  cursor:pointer;
+  border-radius:10px;
+}
+
+.float:hover {
+  background:#fafafa;
 }
 
 .content {
@@ -162,6 +179,59 @@ input[type="checkbox"], input[type="radio"] {
   background:whitesmoke;
   border-color: black;
   color:black;
+}
+
+.button span {
+  color:black;
+  margin:0 10px 0 3px;
+}
+
+.block {
+  display: inline-block;
+  margin:2px;
+}
+
+.small {
+  font-size:smaller;
+  padding:0 0 5px;
+}
+
+.short {
+  width:70px;
+}
+
+.long {
+  width:181px;
+}
+
+.filters {
+  margin:20px 0 10px;
+}
+
+input:not([type="checkbox"]), select {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  height:31px;
+  vertical-align:top;
+  border:1px solid #bbb;
+  outline:none;
+  padding:7px 5px;
+  min-width:60px;
+}
+
+input:focus, select:focus {
+  border-color: #2ad;
+  border-width: 2px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+  filter: hue-rotate(340deg);
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: lightgray;
+  opacity: 1; /* Firefox */
 }
 
 @media screen and (max-device-width: 800px) {

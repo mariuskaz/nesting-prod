@@ -131,10 +131,11 @@ export default function App() {
       {view === 1 && <DataTable title={"Paleistos programos"} items={items.filter(item => item.failed === "0")} />}
       {view === 2 && <DataTable title={"Sutrikimai"} items={items.filter(item => item.failed === "1")} />}
       {view === 3 && <div className="box">
-        PARAMETRAI
+        <p>PARAMETRAI</p>
         <CheckBox label={'Įtraukti staklių prastovas į rodiklius'} value={params.calcIdle} onChange={toggleIdle} />
+        <br/>
       </div>}
-      {view === 3 && <DataTable title={"Staklių įjungimas/išjungimas"} items={items.filter(item => item.failed === "220")} />}
+      {view === 333 && <DataTable title={"Staklių įjungimas/išjungimas"} items={items.filter(item => item.failed === "220")} />}
     </>
   );
 }

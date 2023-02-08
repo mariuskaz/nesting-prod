@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Chart } from "react-google-charts";
 
 export default function DataTable({ title, items }) {
+  const [ expanded, setExpanded ] = useState(false)
+  const [ filteredItems, setFilteredItems ] = useState(items)
+  const [ machine, setMachine ] = useState(0)
+  const [ type, setType ] = useState("all")
+
+  useEffect(() => {
+    setFilteredItems(() => {
+      return items.filter(item => {
+        const currentMachine = machine === 0 ? true : item.machine === machine
+        const currentType = type === "all" ? true : item.type === type
+        return currentMachine && currentType
+      })
+    })
+  }, [items, machine, type])
+  
 
   const cssClassNames = { 
     headerRow:'table-header' 
@@ -15,8 +30,8 @@ export default function DataTable({ title, items }) {
     cssClassNames,
   }
 
-  const style= { 
-    margin:'2px 5px 0px', height:items.length > 40 ? window.innerHeight - 110 : undefined
+  const style = { 
+    margin:'2px 5px 0px', 
   }
 
   const time = t => { 
@@ -30,7 +45,7 @@ export default function DataTable({ title, items }) {
 
   const data = [
     ["Nest.", "Startas", "Pabaiga", "Trukmė", "Programos pavadinimas", "Programos tipas", "Medžiaga"],
-      ...items.map(item => [ 
+      ...filteredItems.map(item => [ 
         item.machine, 
         time(item.start), 
         time(item.end), 
@@ -56,20 +71,90 @@ export default function DataTable({ title, items }) {
     URL.revokeObjectURL(link.href)
   }
 
+  function Nesting({ value }) {
+    return (
+      <div className="block">
+        <div className="small gray">Nestingas</div>
+        <select value={value} onChange={(e) => handleMachine(e)}>
+          <option value="0"></option>
+          <option value="1">#1</option>
+          <option value="2">#2</option>
+          <option value="3">#3</option>
+        </select>
+      </div>
+    )
+  }
+
+  function Type({value}) {
+    return (
+      <div className="block">
+        <div className="small gray">Tipas</div>
+        <select value={value} style={{ width:'94px'}} onChange={(e) => handleType(e)}>
+          <option value="all"></option>
+          <option value="Gamyba">Gamyba</option>
+          <option value="Pagalbinė">Pagalbinė</option>
+          <option value="II darbas">II darbas</option>
+          <option value="Kiti darbai">Kiti darbai</option>
+          <option value="Brokas">Brokas</option>
+        </select>
+      </div>
+    )
+  }
+
+  function Text({ label }) {
+    return (
+      <div className="block">
+        <div className="small gray">{label}</div>
+        <input type="search" className="long" />
+      </div>
+    )
+  }
+
+  function Time({ label }) {
+    return (
+      <div className="block">
+        <div className="small gray">{label}</div>
+        <input type="search" className="short" placeholder="00:00" />
+      </div>
+    )
+  }
+
+  function handleMachine(e) {
+    setMachine(parseInt(e.target.value))
+  }
+
+  function handleType(e) {
+    setType(e.target.value)
+  }
+
   return (
     <>
-      <div className="header">
-        {title.toUpperCase()}<span className="label">{items.length}</span>
-        <button className="button right" onClick={handleSave}>
-          <i className="material-symbols-outlined">save</i>
-        </button>
+      <button className="button float" onClick={handleSave}>
+        <i className="material-symbols-outlined green">save</i>
+        <span>Save</span>
+      </button>
+
+      <div className="box">
+        {!expanded && <i className="material-symbols-outlined float" onClick={()=>setExpanded(true)}>expand_more</i>}
+        {expanded && <i className="material-symbols-outlined float" onClick={()=>setExpanded(false)}>expand_less</i>}
+        <p>{title.toUpperCase()}<span className="label">{filteredItems.length}</span></p>
+        {expanded && 
+        <div className="filters">
+          <Nesting value={machine} onChange={(e) => handleMachine(e)} /> 
+          <Time label={'Startas'} /> <Time label={'Pabaiga'} /> 
+          <Text label={'Programos pavadinimas'} /> 
+          <Type value={type} onChange={(e) => handleType(e)} /> 
+          <Text label={'Medžiaga'} />
+        </div>}
       </div>
+      
       <Chart
         chartType="Table"
-        data={data}
         options={options}
         style={style}
+        data={data}
       />
+
     </>
   );
 }
