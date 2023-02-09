@@ -17,7 +17,7 @@ export default function App() {
   const [ view, setView ] = useState(0)
   const [ params, setParams ] = useState({ 
     calcIdle: true,
-    expandAll: false,
+    expandAll: true,
   })
 
   useEffect(() => {
