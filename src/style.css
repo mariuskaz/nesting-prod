@@ -156,7 +156,7 @@ nav {
 }
 
 .content {
-  margin:15px 0 5px;
+  margin:5px 0 5px;
 }
 
 .footer {
@@ -178,11 +178,13 @@ nav {
   border:1px solid #ccc;
   border-radius:3px;
   color:#666;
+  box-shadow: 0 0 5px lightgray;
 }
 
 .button:hover {
-  background:whitesmoke;
-  border-color: black;
+  background:#fcfcfc;
+  border-color: #2ad;
+  box-shadow: 0 0 2px #2ad;
   color:black;
 }
 

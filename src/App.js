@@ -15,7 +15,10 @@ export default function App() {
   const [ date, setDate ] = useState(new Date())
   const [ items, setItems ] = useState([])
   const [ view, setView ] = useState(0)
-  const [ params, setParams ] = useState({ calcIdle: true })
+  const [ params, setParams ] = useState({ 
+    calcIdle: true,
+    expandAll: false,
+  })
 
   useEffect(() => {
 
@@ -81,7 +84,15 @@ export default function App() {
         )
       )
 
-      setItems(data)
+      const fixedData = data.map( item => {
+        if (item.type !== 'Gamyba') return item
+        let failed = item.failed,
+        found = data.filter( i => i.type === 'Gamyba' && i.name === item.name).length
+        if (found === 1) failed = '0'
+        return {...item, failed}
+      })
+
+      setItems(fixedData)
       setSynced(true)
 
       const time = new Date().toLocaleTimeString()
@@ -116,6 +127,12 @@ export default function App() {
     setSynced(false)
   }
 
+  function toggleExpand() {
+    setParams(values => { 
+      return { ...values, expandAll: !params.expandAll }
+    })
+  }
+
   const short_date = 
     new Intl.DateTimeFormat('lt-LT').format(date)
 
@@ -123,14 +140,15 @@ export default function App() {
     padding:'4px', margin:'10px', border:'1px solid lightgray', background:'white',
   }
 
+
   return (
     <>
       <Sidebar view={view} change={(i)=>setView(i)} />
       <input type="date" style={date_style} value={short_date} onChange={handleChange} /> 
       {view === 0 && <NestingCharts date={date} items={items} />}
-      {view === 1 && <DataTable title={"Įvykdytos programos"} date={date} items={items.filter(item => item.failed === "0")} expanddd={true} />}
-      {view === 2 && <DataTable title={"Sutrikimai"} date={date} items={items.filter(item => item.failed === "1")} />}
-      {view === 3 && <Params params={params} toggleIdle={toggleIdle} /> }
+      {view === 1 && <DataTable title={"Įvykdytos programos"} date={date} items={items.filter(item => item.failed === "0")} expand={params.expandAll} />}
+      {view === 2 && <DataTable title={"Sutrikimai"} date={date} items={items.filter(item => item.failed === "1")} expand={params.expandAll} />}
+      {view === 3 && <Params params={params} toggleIdle={toggleIdle} toggleExpand={toggleExpand} /> }
     </>
   );
 }
