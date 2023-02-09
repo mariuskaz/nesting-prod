@@ -1,12 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Chart } from "react-google-charts";
+import SelectBox from "./SelectBox";
+import TextBox from "./TextBox";
+import TimeBox from "./TimeBox";
 
-export default function DataTable({ title, items }) {
-  const [ expanded, setExpanded ] = useState(false)
+export default function DataTable({ title, date, items, expand }) {
+  const [ expanded, setExpanded ] = useState(expand)
   const [ filteredItems, setFilteredItems ] = useState(items)
   const [ machine, setMachine ] = useState(0)
   const [ type, setType ] = useState("all")
   const [ name, setName ] = useState("")
+  const [ material, setMaterial ] = useState("")
+  const [ startTime, setStartTime ] = useState("")
+  const [ endTime, setEndTime ] = useState("")
+
+  const machines = [
+    { key: '0', value: '' },
+    { key: '1', value: '#1' },
+    { key: '2', value: '#2' },
+    { key: '3', value: '#3' },
+  ]
+
+  const types = [
+    { key: "all", value:"" },
+    { key: "Gamyba", value:"Gamyba" },
+    { key: "Pagalbinė", value:"Pagalbinė" },
+    { key: "II darbas", value:"II darbas" },
+    { key: "Kiti darbai", value:"Kiti darbai" },
+    { key: "Brokas", value:"Brokas" },
+  ]
 
   useEffect(() => {
     setFilteredItems(() => {
@@ -14,11 +36,16 @@ export default function DataTable({ title, items }) {
         const currentMachine = machine === 0 ? true : item.machine === machine
         const currentType = type === "all" ? true : item.type === type
         const currentName = name === "" ? true : item.name.includes(name)
-        return currentMachine && currentType && currentName
+        const currentMaterial = material === "" ? true : item.material.toLowerCase().includes(material.toLowerCase())
+        const short_date = new Intl.DateTimeFormat('lt-LT').format(date)
+        const start_date = startTime.length > 0 ? new Date(short_date + " " + startTime + ":") : undefined
+        const end_date = endTime.length > 0 ? new Date(short_date + " " + endTime + ":") : undefined
+        const currentStart = start_date ? new Date(item.start) > start_date : true
+        const currentEnd = end_date ? new Date(item.end) < end_date : true
+        return currentMachine && currentType && currentName && currentMaterial && currentStart && currentEnd
       })
-      console.log(name)
     })
-  }, [items, machine, type, name])
+  }, [date, items, machine, type, name, material, startTime, endTime])
   
 
   const cssClassNames = { 
@@ -49,15 +76,40 @@ export default function DataTable({ title, items }) {
   const data = [
     ["Nest.", "Startas", "Pabaiga", "Trukmė", "Programos pavadinimas", "Programos tipas", "Medžiaga"],
       ...filteredItems.map(item => [ 
-        item.machine, 
-        time(item.start), 
-        time(item.end), 
-        format(item.duration), 
-        item.name.substring(item.name.lastIndexOf('\\') + 1), 
-        item.type, 
-        item.material 
+      item.machine, 
+      time(item.start), 
+      time(item.end), 
+      format(item.duration), 
+      item.name.substring(item.name.lastIndexOf('\\') + 1), 
+      item.type, 
+      item.material 
       ]),
   ]
+
+  function handleMachine(e) {
+    setMachine(parseInt(e.target.value))
+  }
+
+  function handleType(e) {
+    setType(e.target.value)
+  }
+
+  function handleName(e) {
+    setName(e.target.value)
+  }
+
+  function handleMaterial(e) {
+    setMaterial(e.target.value)
+  }
+
+  function handleStart(e) {
+    setStartTime(e.target.value)
+  }
+
+  
+  function handleEnd(e) {
+    setEndTime(e.target.value)
+  }
 
   function handleSave() {
     console.log('download file')
@@ -74,66 +126,6 @@ export default function DataTable({ title, items }) {
     URL.revokeObjectURL(link.href)
   }
 
-  function Nesting({ value }) {
-    return (
-      <div className="block">
-        <div className="small gray">Nestingas</div>
-        <select value={value} onChange={(e) => handleMachine(e)}>
-          <option value="0"></option>
-          <option value="1">#1</option>
-          <option value="2">#2</option>
-          <option value="3">#3</option>
-        </select>
-      </div>
-    )
-  }
-
-  function Type({value}) {
-    return (
-      <div className="block">
-        <div className="small gray">Tipas</div>
-        <select value={value} style={{ width:'94px'}} onChange={(e) => handleType(e)}>
-          <option value="all"></option>
-          <option value="Gamyba">Gamyba</option>
-          <option value="Pagalbinė">Pagalbinė</option>
-          <option value="II darbas">II darbas</option>
-          <option value="Kiti darbai">Kiti darbai</option>
-          <option value="Brokas">Brokas</option>
-        </select>
-      </div>
-    )
-  }
-
-  function Text({ label, value, change }) {
-    return (
-      <div className="block">
-        <div className="small gray">{label}</div>
-        <input defaultValue={value} type="search" className="long" onChange={(e)=>handleName(e)}/>
-      </div>
-    )
-  }
-
-  function Time({ label }) {
-    return (
-      <div className="block">
-        <div className="small gray">{label}</div>
-        <input type="search" className="short" placeholder="00:00" />
-      </div>
-    )
-  }
-
-  function handleMachine(e) {
-    setMachine(parseInt(e.target.value))
-  }
-
-  function handleType(e) {
-    setType(e.target.value)
-  }
-
-  function handleName(e) {
-    if (e.key === "Enter") setName(e.target.value)
-  }
-
   return (
     <>
       <button className="button float" onClick={handleSave}>
@@ -145,13 +137,39 @@ export default function DataTable({ title, items }) {
         {expanded && <i className="material-symbols-outlined float" onClick={()=>setExpanded(false)}>expand_less</i>}
         <p className="bold">{title.toUpperCase()}<span className="label">{filteredItems.length}</span></p>
         {expanded && 
-        <div className="filters">
-          <Nesting value={machine} onChange={(e) => handleMachine(e)} /> 
-          <Time label={'Startas'} /> 
-          <Time label={'Pabaiga'} /> 
-          <Text label={'Programos pavadinimas'} value={name} onChange={(e)=>handleName(e)} /> 
-          <Type value={type} onChange={(e) => handleType(e)} /> 
-          <Text label={'Medžiaga'} />
+          <div className="filters">
+            <SelectBox 
+              label={'Nestingas'} 
+              value={machine} 
+              options={machines} 
+              onChange={(e) => handleMachine(e)} 
+            />
+            <TimeBox 
+              label={'Startas'} 
+              value={startTime}
+              onChange={(e) => handleStart(e)}
+            /> 
+            <TimeBox 
+              label={'Pabaiga'} 
+              value={endTime}
+              onChange={(e) => handleEnd(e)}
+            />  
+            <TextBox 
+              label={'Programos pavadinimas'} 
+              value={name} 
+              onChange={(e)=>handleName(e)} 
+            /> 
+            <SelectBox 
+              label={'Tipas'} 
+              value={type} 
+              options={types} 
+              onChange={(e) => handleType(e)} 
+            /> 
+            <TextBox 
+              label={'Medžiaga'} 
+              value={material}
+              onChange={(e) => handleMaterial(e)} 
+            />
         </div>}
       </div>
       

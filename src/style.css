@@ -241,6 +241,9 @@ input:focus, select:focus {
 
 input[type="checkbox"], input[type="radio"] {
   filter: hue-rotate(340deg);
+  height:18px;
+  width:18px;
+  vertical-align:middle;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
