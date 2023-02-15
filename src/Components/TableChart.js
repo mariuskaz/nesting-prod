@@ -7,7 +7,7 @@ export default function TableChart({ items }) {
   const options = { title: "Programos", width:'940px', allowHtml: true, cssClassNames }
   const style= { margin:'5px 5px 20px' }
 
-  const filter = (item, machine, type) => item.machine === machine && item.type === type && item.failed !== "1"
+  const filter = (item, machine, type) => item.machine === machine && item.type === type && item.status !== "1"
   const duration = (total, item) => Math.round(total + item.duration)
 
   const format = time => {

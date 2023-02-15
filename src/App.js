@@ -17,8 +17,15 @@ export default function App() {
   const [ view, setView ] = useState(0)
   const [ params, setParams ] = useState({ 
     calcIdle: true,
-    expandAll: false,
+    expandAll: true,
   })
+
+  const short_date = 
+    new Intl.DateTimeFormat('lt-LT').format(date)
+
+  const date_style = {
+    padding:'4px', margin:'10px', border:'1px solid lightgray', background:'white',
+  }
 
   useEffect(() => {
 
@@ -44,14 +51,13 @@ export default function App() {
                   start = powerStarts[1]?.childNodes[0].nodeValue || "",
                   end = powerEnds[powerEnds.length - 1]?.childNodes[0].nodeValue || "", 
                   duration = (new Date(end) - new Date(start)) / 1000 / 60,
-                  failed = "220",
+                  status = "220",
                   type = "Power on/off",
                   material = ""
 
                   if (powerStarts.length > 0 && params.calcIdle)
-                    data.push({ machine, name, start, end, duration, failed, type, material })
+                    data.push({ machine, name, start, end, duration, status, type, material })
                   
-
                   const programs = xml.getElementsByTagName("Program")
                   const regex = /^\d{4}-$/
                   let idle = duration
@@ -62,7 +68,7 @@ export default function App() {
                     end = programs[item].getElementsByTagName("End")[0]?.childNodes[0].nodeValue || "",
                     duration = (new Date(end) - new Date(start)) / 1000 / 60,
                     filename = name.substring(name.lastIndexOf('\\') + 1),
-                    failed = programs[item].getElementsByTagName("Interrupted")[0]?.childNodes[0].nodeValue || "0",
+                    status = programs[item].getElementsByTagName("Interrupted")[0]?.childNodes[0].nodeValue || "0",
                     type = "Kiti darbai",
                     material = programs[item].getAttribute('Product') || ""
 
@@ -72,12 +78,12 @@ export default function App() {
                     if (filename.toUpperCase().substring(0,3) === "BR-") type = "Brokas"
                     else if (filename.includes("_J1C") || filename.includes("_J2C")) type="II darbas"
 
-                    if (name.length > 0) data.push({ machine, name, start, end, duration, failed, type, material })
+                    if (name.length > 0) data.push({ machine, name, start, end, duration, status, type, material })
                     idle -= duration
                   }
 
                   if (powerStarts.length > 0 && params.calcIdle)
-                    data.push({ machine, name, start:"", end:"", duration: idle, failed: "220", type: "Idle time", material })
+                    data.push({ machine, name, start:"", end:"", duration: idle, status: "220", type: "Idle time", material })
 
                 })
                 .catch(err => console.log)
@@ -86,10 +92,10 @@ export default function App() {
 
       const fixedData = data.map( item => {
         if (item.type !== 'Gamyba') return item
-        let failed = item.failed,
+        let status = item.status,
         found = data.filter( i => i.type === 'Gamyba' && i.name === item.name).length
-        if (found === 1) failed = '0'
-        return {...item, failed}
+        if (found === 1) status = '0'
+        return {...item, status}
       })
 
       setItems(fixedData)
@@ -133,22 +139,18 @@ export default function App() {
     })
   }
 
-  const short_date = 
-    new Intl.DateTimeFormat('lt-LT').format(date)
-
-  const date_style = {
-    padding:'4px', margin:'10px', border:'1px solid lightgray', background:'white',
-  }
-
-
   return (
     <>
       <Sidebar view={view} change={(i)=>setView(i)} />
       <input type="date" style={date_style} value={short_date} onChange={handleChange} /> 
-      {view === 0 && <NestingCharts date={date} items={items} />}
-      {view === 1 && <DataTable title={"Įvykdytos programos"} date={date} items={items.filter(item => item.failed === "0")} expand={params.expandAll} />}
-      {view === 2 && <DataTable title={"Sutrikimai"} date={date} items={items.filter(item => item.failed === "1")} expand={params.expandAll} />}
-      {view === 3 && <Params params={params} toggleIdle={toggleIdle} toggleExpand={toggleExpand} /> }
+      {view === 0 && 
+        <NestingCharts date={date} items={items} />}
+      {view === 1 && 
+        <DataTable title={"Įvykdytos programos"} date={date} items={items.filter(item => item.status === "0")} expand={params.expandAll} />}
+      {view === 2 && 
+        <DataTable title={"Sutrikimai"} date={date} items={items.filter(item => item.status === "1")} expand={params.expandAll} />}
+      {view === 3 && 
+        <Params params={params} toggleIdle={toggleIdle} toggleExpand={toggleExpand} items={items} /> }
     </>
   );
 }
