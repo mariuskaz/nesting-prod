@@ -12,7 +12,6 @@ export default function ColumnChart({ title, items }) {
   const qty = sheets.reduce((total, qty) => total + qty, 0)
   
   const options = {
-
     legend: "none", 
     title: title + " (" + qty + " lap.)",
 
@@ -27,19 +26,12 @@ export default function ColumnChart({ title, items }) {
     animation: {
       duration: 1000,
       easing: "out",
-      /* startup: true, */
     },
-    
   }
-
-  /* const duration = (total, item) => format(Math.round(total + item.duration))
-  const format = d => {
-    return new Date(d * 60 * 1000).toISOString().substring(11, 11 + 8) || "00:00:00";
-  } */
   
   const header =  [["Nestingas", "Lapai", { role: 'annotation' }, { role: "style" }]]
   const rows = machines.map( machine => [
-    "Nestingas #" + machine, // + "\n\n" + items.filter(item => item.machine === machine && item.type === "Power state").reduce(duration, 0), 
+    "Nestingas #" + machine,
     items.filter(item => item.machine === machine && item.type === "Gamyba" && item.status === "0").length, 
     items.filter(item => item.machine === machine && item.type === "Gamyba" && item.status === "0").length + " lapai", 
     blue_color
@@ -48,6 +40,12 @@ export default function ColumnChart({ title, items }) {
   const data = [...header, ...rows]
 
   return (
-    <Chart chartType="ColumnChart" width="940px" height="400px" data={data} options={options} style={style} />
+    <Chart 
+      chartType="ColumnChart" 
+      width="940px" 
+      height="400px" 
+      data={data} 
+      options={options} 
+      style={style} />
   )
 }

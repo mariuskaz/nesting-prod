@@ -232,6 +232,13 @@ nav {
   margin:15px 0 10px;
 }
 
+.date-picker {
+  background:white;
+  border:1px solid lightgray;
+  margin:10px;
+  padding:4px;
+}
+
 hr {
   border-top:1px solid #fafafa;
   margin-bottom: 15px;

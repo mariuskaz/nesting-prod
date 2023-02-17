@@ -20,13 +20,6 @@ export default function App() {
     expandAll: true,
   })
 
-  const short_date = 
-    new Intl.DateTimeFormat('lt-LT').format(date)
-
-  const date_style = {
-    padding:'4px', margin:'10px', border:'1px solid lightgray', background:'white',
-  }
-
   useEffect(() => {
 
     const year = date.toLocaleString("default", { year: 'numeric' })
@@ -118,6 +111,11 @@ export default function App() {
 
   }, [synced, date, items, params])
 
+  function DatePicker({value, onChange}) {
+    const short_date = new Intl.DateTimeFormat('lt-LT').format(value)
+    return <input type="date" className="date-picker" value={short_date} onChange={onChange} /> 
+  }
+
   function handleChange(e) {
     if (e.target.value.length) {
       setDate(new Date(e.target.value))
@@ -141,16 +139,30 @@ export default function App() {
 
   return (
     <>
-      <Sidebar view={view} change={(i)=>setView(i)} />
-      <input type="date" style={date_style} value={short_date} onChange={handleChange} /> 
+      <Sidebar view={view} onChange={(i)=>setView(i)} />
+      <DatePicker value={date} onChange={handleChange} />
+
       {view === 0 && 
-        <NestingCharts date={date} items={items} />}
+          <NestingCharts date={date} items={items} />
+      }
+
       {view === 1 && 
-        <DataTable title={"Įvykdytos programos"} date={date} items={items.filter(item => item.status === "0")} expand={params.expandAll} />}
+        <DataTable title={"Įvykdytos programos"} date={date}
+          items={items.filter(item => item.status === "0")} 
+          expand={params.expandAll} />
+      }
+
       {view === 2 && 
-        <DataTable title={"Sutrikimai"} date={date} items={items.filter(item => item.status === "1")} expand={params.expandAll} />}
+        <DataTable title={"Sutrikimai"} date={date}
+          items={items.filter(item => item.status === "1")} 
+          expand={params.expandAll} />
+      }
+
       {view === 3 && 
-        <Params params={params} toggleIdle={toggleIdle} toggleExpand={toggleExpand} items={items} /> }
+        <Params params={params} items={items}
+          toggleIdle={toggleIdle} toggleExpand={toggleExpand} /> 
+      }
+
     </>
   );
 }
