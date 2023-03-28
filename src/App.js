@@ -52,7 +52,7 @@ export default function App() {
                     data.push({ machine, name, start, end, duration, status, type, material })
                   
                   const programs = xml.getElementsByTagName("Program")
-                  const regex = /^\d{4}-$/
+                  const regex = /^\d{4}[-+]$/
                   let idle = duration
 
                   for (let item = 0; item < programs.length; item++) {
