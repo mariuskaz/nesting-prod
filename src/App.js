@@ -43,7 +43,7 @@ export default function App() {
                   const machine = index + 1, name = "Nestingas #" + machine,
                   start = powerStarts[1]?.childNodes[0].nodeValue || "",
                   end = powerEnds[powerEnds.length - 1]?.childNodes[0].nodeValue || "", 
-                  duration = (new Date(end) - new Date(start)) / 1000 / 60,
+                  duration = (new Date(end) - new Date(start)) / 1000 / 60 || 0,
                   status = "220",
                   type = "Power on/off",
                   material = ""
@@ -59,7 +59,7 @@ export default function App() {
                     let name = programs[item].getElementsByTagName("Name")[0]?.childNodes[0].nodeValue || "",
                     start = programs[item].getElementsByTagName("Start")[0]?.childNodes[0].nodeValue || "",
                     end = programs[item].getElementsByTagName("End")[0]?.childNodes[0].nodeValue || "",
-                    duration = (new Date(end) - new Date(start)) / 1000 / 60,
+                    duration = (new Date(end) - new Date(start)) / 1000 / 60 || 0,
                     filename = name.substring(name.lastIndexOf('\\') + 1),
                     status = programs[item].getElementsByTagName("Interrupted")[0]?.childNodes[0].nodeValue || "0",
                     type = "Kiti darbai",
