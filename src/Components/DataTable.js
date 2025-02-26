@@ -13,6 +13,7 @@ export default function DataTable({ title, date, items, expand }) {
   const [ material, setMaterial ] = useState("")
   const [ startTime, setStartTime ] = useState("")
   const [ endTime, setEndTime ] = useState("")
+  const [ pageSize, setPageSize ] = useState(10);
 
   const machines = [
     { key: '0', value: '' },
@@ -46,6 +47,19 @@ export default function DataTable({ title, date, items, expand }) {
       })
     })
   }, [date, items, machine, type, name, material, startTime, endTime])
+
+  useEffect(() => {
+    const updatePageSize = () => {
+      const rowHeight = 20; // Approximate row height in pixels
+      const availableHeight = window.innerHeight - 250;
+      const calculatedRows = Math.floor(availableHeight / rowHeight);
+      setPageSize(calculatedRows > 1 ? calculatedRows : 1);
+    };
+
+    updatePageSize();
+    window.addEventListener("resize", updatePageSize);
+    return () => window.removeEventListener("resize", updatePageSize);
+  }, []);
   
 
   const cssClassNames = { 
@@ -58,6 +72,7 @@ export default function DataTable({ title, date, items, expand }) {
     width:'940px', 
     sortColumn: 0,
     cssClassNames,
+    pageSize,
   }
 
   const style = { 
@@ -129,7 +144,7 @@ export default function DataTable({ title, date, items, expand }) {
   return (
     <>
       <button className="button float" onClick={handleSave}>
-        <i className="material-symbols-outlined green">save</i>
+        <i className="material-symbols-outlined gray">save</i>
       </button>
 
       <div className="box">

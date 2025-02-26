@@ -59,7 +59,7 @@ nav {
   font-size:large;
   z-index: 999;
   user-select: none;
-  box-shadow: 0 0 5px gray;
+  /* box-shadow: 0 0 5px gray; */
 }
 
 .side-icon {
@@ -91,7 +91,6 @@ nav {
 
 .gray {
   color:#999;
-  color:#888;
 }
 
 .bottom {
@@ -178,7 +177,7 @@ nav {
   border:1px solid #ccc;
   border-radius:3px;
   color:#666;
-  box-shadow: 0 0 5px lightgray;
+  /* box-shadow: 0 0 5px lightgray; */
 }
 
 .button:hover {
@@ -274,6 +273,17 @@ input[type="checkbox"], input[type="radio"] {
   color: lightgray;
   opacity: 1; /* Firefox */
 }
+
+.google-visualization-table-page-number {
+  font-size: 14px !important;
+  padding:1px 5px !important;
+}
+
+.goog-custom-button {
+  display:none !important;
+}
+
+
 
 @media screen and (max-device-width: 800px) {
  body, html {
