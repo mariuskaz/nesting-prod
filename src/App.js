@@ -3,6 +3,7 @@ import NestingCharts from "./Components/NestingCharts"
 import DataTable from "./Components/DataTable"
 import Sidebar from "./Components/Sidebar"
 import Params from "./Components/Params"
+import Stats from "./Components/Stats"
 
 const locations = [
   "http://192.168.100.102/nesting/snovar%2001/tpaprod/",
@@ -14,7 +15,7 @@ export default function App() {
   const [ synced, setSynced ] = useState(false)
   const [ date, setDate ] = useState(new Date())
   const [ items, setItems ] = useState([])
-  const [ view, setView ] = useState(0)
+  const [ view, setView ] = useState(1)
   const [ params, setParams ] = useState({ 
     calcIdle: true,
     expandAll: true,
@@ -142,23 +143,25 @@ export default function App() {
       <Sidebar view={view} onChange={(i)=>setView(i)} />
       <DatePicker value={date} onChange={handleChange} />
 
-      {view === 0 && 
+      {view === 1 && 
           <NestingCharts date={date} items={items} />
       }
 
-      {view === 1 && 
+      {view === 2 && 
         <DataTable title={"Įvykdytos programos"} date={date}
           items={items.filter(item => item.status === "0")} 
           expand={params.expandAll} />
       }
 
-      {view === 2 && 
+      {view === 3 && 
         <DataTable title={"Sutrikimai"} date={date}
           items={items.filter(item => item.status === "1")} 
           expand={params.expandAll} />
       }
 
-      {view === 3 && 
+      {view === 4 && <Stats/>}
+
+      {view === 0 && 
         <Params params={params} items={items}
           toggleIdle={toggleIdle} toggleExpand={toggleExpand} /> 
       }

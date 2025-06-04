@@ -283,7 +283,28 @@ input[type="checkbox"], input[type="radio"] {
   display:none !important;
 }
 
+.stat-table {
+  width:100%;
+  margin:10px 0;
+  border-collapse: collapse;
+  font-size:9pt;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+}
 
+.stat-table td {
+  border:1px solid rgb(235, 229, 229);
+  padding:10px;
+  text-align: center;
+  width:50%;
+}
+
+.stat-table td:nth-child(2) {
+  background: #fafafa;
+  text-align: center;
+  color:gray;
+  font-weight:500;
+}
 
 @media screen and (max-device-width: 800px) {
  body, html {
