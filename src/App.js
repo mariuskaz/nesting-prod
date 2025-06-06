@@ -13,6 +13,7 @@ const locations = [
 
 export default function App() {
   const [ synced, setSynced ] = useState(false)
+  const [ updated, setUpdated ] = useState(true)
   const [ date, setDate ] = useState(new Date())
   const [ items, setItems ] = useState([])
   const [ view, setView ] = useState(1)
@@ -140,8 +141,10 @@ export default function App() {
 
   return (
     <>
+      {(!synced || !updated) && <div className='dot-pulse'/>}
       <Sidebar view={view} onChange={(i)=>setView(i)} />
       <DatePicker value={date} onChange={handleChange} />
+      
 
       {view === 1 && 
           <NestingCharts date={date} items={items} />
@@ -159,7 +162,8 @@ export default function App() {
           expand={params.expandAll} />
       }
 
-      {view === 4 && <Stats/>}
+      {view === 4 && <Stats date={date} 
+          setUpdated={(b)=>setUpdated(b)} />}
 
       {view === 0 && 
         <Params params={params} items={items}

@@ -302,7 +302,7 @@ input[type="checkbox"], input[type="radio"] {
 .stat-table td:nth-child(2) {
   background: #fafafa;
   text-align: center;
-  color:gray;
+  color:black;
   font-weight:500;
 }
 
@@ -310,4 +310,94 @@ input[type="checkbox"], input[type="radio"] {
  body, html {
   margin-left:30px;
  }
+}
+
+:root {
+    --color:gray;
+}
+
+.dot-pulse {
+    position: relative;
+    top:15px;
+    left: -9999px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: var(--color);
+    color: var(--color);
+    box-shadow: 9999px 0 0 -5px var(--color);
+    animation: dotPulse 1.5s infinite linear;
+    animation-delay: .25s;
+    margin:auto;
+    margin-left:50%;
+    position:absolute;
+}
+
+@media screen and (max-width: 800px) {
+    .dot-pulse {
+        margin-left:50%;
+    }
+  }
+
+.dot-pulse::before, .dot-pulse::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: var(--color);
+    color:var(--color);
+}
+
+.dot-pulse::before {
+    box-shadow: 9984px 0 0 -5px var(--color);
+    animation: dotPulseBefore 1.5s infinite linear;
+    animation-delay: 0s;
+}
+
+.dot-pulse::after {
+    box-shadow: 10014px 0 0 -5px var(--color);
+    animation: dotPulseAfter 1.5s infinite linear;
+    animation-delay: .5s;
+}
+
+@keyframes dotPulseBefore {
+    0% {
+        box-shadow: 9984px 0 0 -5px var(--color);
+    }
+    30% {
+        box-shadow: 9984px 0 0 2px var(--color);
+    }
+    60%,
+    100% {
+        box-shadow: 9984px 0 0 -5px var(--color);
+    }
+}
+
+@keyframes dotPulse {
+    0% {
+        box-shadow: 9999px 0 0 -5px var(--color);
+    }
+    30% {
+        box-shadow: 9999px 0 0 2px var(--color);
+    }
+    60%,
+    100% {
+        box-shadow: 9999px 0 0 -5px var(--color);
+    }
+}
+
+@keyframes dotPulseAfter {
+    0% {
+        box-shadow: 10014px 0 0 -5px var(--color);
+    }
+    30% {
+        box-shadow: 10014px 0 0 2px var(--color);
+    }
+    60%,
+    100% {
+        box-shadow: 10014px 0 0 -5px var(--color);
+    }
 }
