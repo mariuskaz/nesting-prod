@@ -162,7 +162,7 @@ export default function App() {
           expand={params.expandAll} />
       }
 
-      {view === 4 && <Stats date={date} 
+      {view === 4 && <Stats date={date} updated={updated} 
           setUpdated={(b)=>setUpdated(b)} />}
 
       {view === 0 && 
