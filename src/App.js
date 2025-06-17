@@ -101,9 +101,8 @@ export default function App() {
 
   const fetchStats = useCallback(() => {
     console.log(new Date().toLocaleTimeString(), "fetching stats");
-    const shortDate = new Intl.DateTimeFormat("lt-LT").format(date).replaceAll("-", ".");
-    setStats({ on: "00:00:00", off: "00:00:00", panels: 0, meters: 0.0, working: "00:00:00" });
-    fetch("http://192.168.100.102/nesting/akron/stats.asp?" + shortDate)
+    const fixedDate = new Intl.DateTimeFormat("lt-LT").format(date).replaceAll("-", ".");
+    fetch("http://192.168.100.102/nesting/akron/stats.asp?" + fixedDate)
       .then(res => res.json())
       .then(data => {
         setStats({
