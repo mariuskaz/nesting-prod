@@ -134,18 +134,18 @@ export default function App() {
     return () => clearInterval(interval);
   }, [date, view, loaded, updated, fetchResults, fetchStats]);
 
-  const handleDateChange = e => {
-    const newDate = new Date(e.target.value);
+  const handleDateChange = event => {
+    const newDate = new Date(event.target.value);
     if (!isNaN(newDate)) {
       setDate(newDate);
       setLoaded(false);
     }
-    e.target.blur();
+    event.target.blur();
   };
 
-  const handleViewChange = v => {
-    setView(v);
-    setLoaded(false);
+  const handleViewChange = value => {
+    if (view === 4 || value === 4) setLoaded(false);
+    setView(value);
   };
 
   function toggleIdleTime() {
