@@ -1,34 +1,9 @@
-import { useState, useEffect } from "react"
+import React from 'react';
 
-export default function Stats({ date, updated, setUpdated}) {
-    const [stats, setStats] = useState({ on:"00:00:00", off:"00:00:00", panels: 0, meters: 0.0, working: "00:00:00" })
+export default function Stats({ stats, loaded }) {
 
-    useEffect(() => {
-        setUpdated(false)
-        setStats({ on:"00:00:00", off:"00:00:00", panels: 0, meters: 0.0, working: "00:00:00" })
-        const short_date = new Intl.DateTimeFormat('lt-LT').format(date).replaceAll("-", ".")
-        const time = new Date().toLocaleTimeString()
-        console.log(time, "fetching stats...")
-        fetch("http://192.168.100.102/nesting/akron/stats.asp?" + short_date)
-            .then(res => res.json())
-            .then(data => {
-                setStats({
-                    on: data.on ?? "00:00:00",
-                    off: data.off ?? "00:00:00",
-                    working: data.working ?? "00:00:00",
-                    panels: data.panels ?? 0,
-                    meters: data.meters ?? 0.0
-                })
-                setUpdated(true)
-            })
-            .catch((e) => {
-                setStats({ panels: 0, meters: 0.0, working: "00:00:00" })
-                console.log("Klaida: " + e)
-            })
-    }, [date])
-
-    const blurText = {
-        color: updated ? "inherit" : "#fafafa",
+    const resultsText = {
+        color: loaded ? "inherit" : "#fafafa",
     }
 
     return (
@@ -39,49 +14,51 @@ export default function Stats({ date, updated, setUpdated}) {
         </div>
         <div className="box">
             <br/>
-            <div className='inline'>Power On <span style={blurText}>{stats.on}</span></div>
-            <div className='inline'>Power Off <span style={blurText}>{stats.off}</span></div>
+            <div className='inline'>Power On <span style={resultsText}>{stats.on}</span></div>
+            <div className='inline'>Power Off <span style={resultsText}>{stats.off}</span></div>
             <br/>
         </div>
         <div className="box">
             <table className="stat-table">
-                <tr>
-                    <td>Apdirbtos plokštės</td>
-                    <td style={blurText}>{stats.panels}</td>
-                </tr>
-                <tr>
-                    <td>Apdirbti tiesiniai metrai</td>
-                    <td style={blurText}>{stats.meters}</td>
-                </tr>
-                <tr>
-                    <td>Programos paruošimo laikas</td>
-                    <td style={blurText}>00:00:00</td>
-                </tr>
-                <tr>
-                    <td>Programos keitimų skaičius</td>
-                    <td style={blurText}>0</td>
-                </tr>
-                <tr>
-                    <td>Rankinio paruošimo laikas</td>
-                    <td style={blurText}>00:00:00</td>
-                </tr>
-                <tr>
-                    <td>Staklių techninės priežiūros laikas</td>
-                    <td style={blurText}>00:00:00</td>
-                </tr>
-                <tr>
-                    <td>Staklių avarinės būsenos laikas</td>
-                    <td style={blurText}>00:00:00</td>
-                </tr>
-                <tr>
-                    <td>Staklių darbo laikas</td>
-                    <td style={blurText}>{stats.working}</td>
-                </tr>
-                <tr>
-                    <td>Tuščių staklių darbo laikas</td>
-                    <td style={blurText}>00:00:00</td>
-                </tr>
-                <tr></tr>
+                <tbody>
+                    <tr>
+                        <td>Apdirbtos plokštės</td>
+                        <td style={resultsText}>{stats.panels}</td>
+                    </tr>
+                    <tr>
+                        <td>Apdirbti tiesiniai metrai</td>
+                        <td style={resultsText}>{stats.meters}</td>
+                    </tr>
+                    <tr>
+                        <td>Programos paruošimo laikas</td>
+                        <td style={resultsText}>00:00:00</td>
+                    </tr>
+                    <tr>
+                        <td>Programos keitimų skaičius</td>
+                        <td style={resultsText}>0</td>
+                    </tr>
+                    <tr>
+                        <td>Rankinio paruošimo laikas</td>
+                        <td style={resultsText}>00:00:00</td>
+                    </tr>
+                    <tr>
+                        <td>Staklių techninės priežiūros laikas</td>
+                        <td style={resultsText}>00:00:00</td>
+                    </tr>
+                    <tr>
+                        <td>Staklių avarinės būsenos laikas</td>
+                        <td style={resultsText}>00:00:00</td>
+                    </tr>
+                    <tr>
+                        <td>Staklių darbo laikas</td>
+                        <td style={resultsText}>{stats.working}</td>
+                    </tr>
+                    <tr>
+                        <td>Tuščių staklių darbo laikas</td>
+                        <td style={resultsText}>00:00:00</td>
+                    </tr>
+                    <tr></tr>
+                </tbody>
             </table>
         </div>
     </>

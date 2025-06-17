@@ -1,175 +1,189 @@
-import React, { useState, useEffect } from "react"
-import NestingCharts from "./Components/NestingCharts"
-import DataTable from "./Components/DataTable"
-import Sidebar from "./Components/Sidebar"
-import Params from "./Components/Params"
-import Stats from "./Components/Stats"
+import React, { useState, useEffect, useCallback } from "react";
+import NestingCharts from "./Components/NestingCharts";
+import DataTable from "./Components/DataTable";
+import Sidebar from "./Components/Sidebar";
+import Params from "./Components/Params";
+import Stats from "./Components/Stats";
 
 const locations = [
   "http://192.168.100.102/nesting/snovar%2001/tpaprod/",
   "http://192.168.100.102/nesting/snovar%2002/tpaprod/",
   "http://192.168.100.102/nesting/snovar%2003/tpaprod/",
-]
+];
 
 export default function App() {
-  const [ synced, setSynced ] = useState(false)
-  const [ updated, setUpdated ] = useState(true)
-  const [ date, setDate ] = useState(new Date())
-  const [ items, setItems ] = useState([])
-  const [ view, setView ] = useState(1)
-  const [ params, setParams ] = useState({ 
-    calcIdle: true,
-    expandAll: true,
-  })
+  const [date, setDate] = useState(new Date());
+  const [view, setView] = useState(1);
+  const [loaded, setLoaded] = useState(false);
+  const [updated, setUpdated] = useState(false);
+  const [results, setResults] = useState([]);
+  const [stats, setStats] = useState({ on: "00:00:00", off: "00:00:00", panels: 0, meters: 0.0, working: "00:00:00" });
+  const [params, setParams] = useState({ calcIdleTime: true, expandAll: true });
+
+  const getFileUrl = useCallback(() => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const fileName = `TPAProd_0_${year}${month}${day}.xml`;
+    return locations.map(loc => `${loc}${year}\\${month}\\${fileName}`);
+  }, [date]);
+
+  const fetchResults = useCallback(async () => {
+    const urls = getFileUrl();
+    let data = [];
+
+    await Promise.all(urls.map(async (url, index) => {
+      try {
+        const response = await fetch(url, { cache: "no-store" });
+        const text = await response.text();
+        const xml = new DOMParser().parseFromString(text, "application/xml");
+
+        const machine = index + 1;
+        const name = `Nestingas #${machine}`;
+        const powerStarts = xml.getElementsByTagName("Start");
+        const powerEnds = xml.getElementsByTagName("End");
+
+        const start = powerStarts[1]?.textContent || "";
+        const end = powerEnds[powerEnds.length - 1]?.textContent || "";
+        const duration = (new Date(end) - new Date(start)) / 60000 || 0;
+
+        if (powerStarts.length > 0 && params.calcIdleTime) {
+          data.push({ machine, name, start, end, duration, status: "220", type: "Power on/off", material: "" });
+        }
+
+        const programs = xml.getElementsByTagName("Program");
+        const regex = /^\d{4}[-+]$/;
+        let idle = duration;
+
+        Array.from(programs).forEach(program => {
+          const progName = program.getElementsByTagName("Name")[0]?.textContent || "";
+          const progStart = program.getElementsByTagName("Start")[0]?.textContent || "";
+          const progEnd = program.getElementsByTagName("End")[0]?.textContent || "";
+          const progDuration = (new Date(progEnd) - new Date(progStart)) / 60000 || 0;
+          const filename = progName.substring(progName.lastIndexOf("\\") + 1);
+          let type = "Kiti darbai";
+
+          if (regex.test(filename.substring(0, 5))) type = "Gamyba";
+          if (/CINAVIM|NUTRAUKIM/i.test(filename)) type = "Pagalbinė";
+          if (filename.toUpperCase().includes("BR")) type = "Brokas";
+          else if (/_J[12]C/.test(filename)) type = "II darbas";
+
+          const material = program.getAttribute("Product") || "";
+          const status = program.getElementsByTagName("Interrupted")[0]?.textContent || "0";
+
+          if (progName) {
+            data.push({ machine, name: progName, start: progStart, end: progEnd, duration: progDuration, status, type, material });
+            idle -= progDuration;
+          }
+        });
+
+        if (powerStarts.length > 0 && params.calcIdleTime) {
+          data.push({ machine, name, start: "", end: "", duration: idle, status: "220", type: "Idle time", material: "" });
+        }
+      } catch (e) {
+        console.error("Data fetch error for", url, e);
+      }
+    }));
+
+    // Fix duplicate gamyba items
+    const fixedData = data.map(item => {
+      if (item.type !== "Gamyba") return item;
+      const same = data.filter(i => i.type === "Gamyba" && i.name === item.name);
+      return { ...item, status: same.length === 1 ? "0" : item.status };
+    });
+
+    setResults(fixedData);
+    setLoaded(true);
+    setUpdated(true);
+
+    console.log(new Date().toLocaleTimeString(), "nesting results:", fixedData.length);
+  }, [params.calcIdleTime, getFileUrl]);
+
+  const fetchStats = useCallback(() => {
+    console.log(new Date().toLocaleTimeString(), "fetching stats");
+    const shortDate = new Intl.DateTimeFormat("lt-LT").format(date).replaceAll("-", ".");
+    setStats({ on: "00:00:00", off: "00:00:00", panels: 0, meters: 0.0, working: "00:00:00" });
+    fetch("http://192.168.100.102/nesting/akron/stats.asp?" + shortDate)
+      .then(res => res.json())
+      .then(data => {
+        setStats({
+          on: data.on ?? "00:00:00",
+          off: data.off ?? "00:00:00",
+          working: data.working ?? "00:00:00",
+          panels: data.panels ?? 0,
+          meters: data.meters ?? 0.0,
+        });
+        setLoaded(true);
+        setUpdated(true);
+      })
+      .catch(e => {
+        console.error("Stats fetch error:", e);
+      });
+  }, [date]);
 
   useEffect(() => {
-
-    const year = date.toLocaleString("default", { year: 'numeric' })
-    const month = date.toLocaleString("default", { month: '2-digit' })
-    const day = date.toLocaleString("default", { day: '2-digit' })
-    const file = year + "\\" + month + "\\TPAProd_0_" + year + month + day + ".xml";
-    const urls = locations.map( location => location + file)
-
-    const fetchData = async() => {
-      let data = []
-      await Promise.all(
-        urls.map((url, index) =>
-            fetch(url, {cache: "no-store"})
-                .then((res) => res.text())
-                .then(text => {
-                  const parser = new DOMParser()
-                  const xml = parser.parseFromString(text, "application/xml")
-                  const powerStarts = xml.getElementsByTagName("Start")
-                  const powerEnds = xml.getElementsByTagName("End")
-
-                  const machine = index + 1, name = "Nestingas #" + machine,
-                  start = powerStarts[1]?.childNodes[0].nodeValue || "",
-                  end = powerEnds[powerEnds.length - 1]?.childNodes[0].nodeValue || "", 
-                  duration = (new Date(end) - new Date(start)) / 1000 / 60 || 0,
-                  status = "220",
-                  type = "Power on/off",
-                  material = ""
-
-                  if (powerStarts.length > 0 && params.calcIdle)
-                    data.push({ machine, name, start, end, duration, status, type, material })
-                  
-                  const programs = xml.getElementsByTagName("Program")
-                  const regex = /^\d{4}[-+]$/
-                  let idle = duration
-
-                  for (let item = 0; item < programs.length; item++) {
-                    let name = programs[item].getElementsByTagName("Name")[0]?.childNodes[0].nodeValue || "",
-                    start = programs[item].getElementsByTagName("Start")[0]?.childNodes[0].nodeValue || "",
-                    end = programs[item].getElementsByTagName("End")[0]?.childNodes[0].nodeValue || "",
-                    duration = (new Date(end) - new Date(start)) / 1000 / 60 || 0,
-                    filename = name.substring(name.lastIndexOf('\\') + 1),
-                    status = programs[item].getElementsByTagName("Interrupted")[0]?.childNodes[0].nodeValue || "0",
-                    type = "Kiti darbai",
-                    material = programs[item].getAttribute('Product') || ""
-
-                    if (regex.test(filename.substring(0, 5))) type = "Gamyba"
-                    if (filename.toUpperCase().includes("CINAVIM")) type = "Pagalbinė"
-                    if (filename.toUpperCase().includes("NUTRAUKIM")) type = "Pagalbinė"
-                    if (filename.toUpperCase().substring(0,3) === "BR-") type = "Brokas"
-                    else if (filename.includes("_J1C") || filename.includes("_J2C")) type="II darbas"
-
-                    if (name.length > 0) data.push({ machine, name, start, end, duration, status, type, material })
-                    idle -= duration
-                  }
-
-                  if (powerStarts.length > 0 && params.calcIdle)
-                    data.push({ machine, name, start:"", end:"", duration: idle, status: "220", type: "Idle time", material })
-
-                })
-                .catch(err => console.log)
-        )
-      )
-
-      const fixedData = data.map( item => {
-        if (item.type !== 'Gamyba') return item
-        let status = item.status,
-        found = data.filter( i => i.type === 'Gamyba' && i.name === item.name).length
-        if (found === 1) status = '0'
-        return {...item, status}
-      })
-
-      setItems(fixedData)
-      setSynced(true)
-
-      const time = new Date().toLocaleTimeString()
-      console.log(time, 'results:', data.length)
-
+    if (!loaded || !updated) {
+      view === 4 ? fetchStats() : fetchResults();
     }
 
-    if (!synced) fetchData()
+    const interval = setInterval(() => {
+      const isToday = new Date(date).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0);
+      if (isToday) setUpdated(false);
+    }, 5 * 60 * 1000);
 
-    const refresh = setInterval(() => {
-        const today = new Date().setHours(0,0,0,0)
-        const picked = date.setHours(0,0,0,0)
-        if (picked === today) setSynced(false)
-    }, 1000 * 60 * 5)
+    return () => clearInterval(interval);
+  }, [date, view, loaded, updated, fetchResults, fetchStats]);
 
-    return () => clearInterval(refresh)
+  const handleDateChange = e => {
+    const newDate = new Date(e.target.value);
+    if (!isNaN(newDate)) {
+      setDate(newDate);
+      setLoaded(false);
+    }
+    e.target.blur();
+  };
 
-  }, [synced, date, items, params])
+  const handleViewChange = v => {
+    setView(v);
+    setLoaded(false);
+  };
 
-  function DatePicker({value, onChange}) {
-    const short_date = new Intl.DateTimeFormat('lt-LT').format(value)
-    return <input type="date" className="date-picker" value={short_date} onChange={onChange} /> 
+  function toggleIdleTime() {
+    setParams(p => ({ ...p, calcIdleTime: !p.calcIdleTime }));
+    setLoaded(false);
   }
 
-  function handleChange(e) {
-    if (e.target.value.length) {
-      setDate(new Date(e.target.value))
-      setSynced(false)
-      e.target.blur()
+  const toggleExpandAll = () => {
+    setParams(p => ({ ...p, expandAll: !p.expandAll }));
+  };
+
+  const DatePicker = ({ value, onChange }) => {
+    const formatted = value.toISOString().split("T")[0];
+    return <input type="date" className="date-picker" value={formatted} onChange={onChange} />;
+  };
+
+  const Dashboard = () => {
+    switch (view) {
+      case 0: return <Params params={params} items={results} toggleIdle={toggleIdleTime} toggleExpand={toggleExpandAll} />;
+      case 1: return <NestingCharts date={date} items={results} />;
+      case 2: return <DataTable title="Įvykdytos programos" date={date} items={results.filter(i => i.status === "0")} expand={params.expandAll} />;
+      case 3: return <DataTable title="Sutrikimai" date={date} items={results.filter(i => i.status === "1")} expand={params.expandAll} />;
+      case 4: return <Stats stats={stats} loaded={loaded} />;
+      default: return null;
     }
   }
 
-  function toggleIdle() {
-    setParams(values => { 
-      return { ...values, calcIdle: !values.calcIdle }
-    })
-    setSynced(false)
-  }
-
-  function toggleExpand() {
-    setParams(values => { 
-      return { ...values, expandAll: !params.expandAll }
-    })
-  }
+  const Spinner = () => {
+    if (!loaded || !updated) return <div className="dot-pulse" />
+    return null;
+  };
 
   return (
     <>
-      {(!synced || !updated) && <div className='dot-pulse'/>}
-      <Sidebar view={view} onChange={(i)=>setView(i)} />
-      <DatePicker value={date} onChange={handleChange} />
-      
-
-      {view === 1 && 
-          <NestingCharts date={date} items={items} />
-      }
-
-      {view === 2 && 
-        <DataTable title={"Įvykdytos programos"} date={date}
-          items={items.filter(item => item.status === "0")} 
-          expand={params.expandAll} />
-      }
-
-      {view === 3 && 
-        <DataTable title={"Sutrikimai"} date={date}
-          items={items.filter(item => item.status === "1")} 
-          expand={params.expandAll} />
-      }
-
-      {view === 4 && <Stats date={date} updated={updated} 
-          setUpdated={(b)=>setUpdated(b)} />}
-
-      {view === 0 && 
-        <Params params={params} items={items}
-          toggleIdle={toggleIdle} toggleExpand={toggleExpand} /> 
-      }
-
+      <Spinner />
+      <Sidebar view={view} onChange={handleViewChange} />
+      <DatePicker value={date} onChange={handleDateChange} />
+      <Dashboard />
     </>
   );
 }
