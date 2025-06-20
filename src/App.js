@@ -31,25 +31,21 @@ export default function App() {
   const fetchResults = useCallback(async () => {
     const urls = getFileUrl();
     let data = [];
-
     await Promise.all(urls.map(async (url, index) => {
       try {
         const response = await fetch(url, { cache: "no-store" });
         const text = await response.text();
         const xml = new DOMParser().parseFromString(text, "application/xml");
-
         const machine = index + 1;
         const name = `Nestingas #${machine}`;
         const powerStarts = xml.getElementsByTagName("Start");
         const powerEnds = xml.getElementsByTagName("End");
-
         const start = powerStarts[1]?.textContent || "";
         const end = powerEnds[powerEnds.length - 1]?.textContent || "";
         const duration = (new Date(end) - new Date(start)) / 60000 || 0;
 
-        if (powerStarts.length > 0 && params.calcIdleTime) {
+        if (powerStarts.length > 0 && params.calcIdleTime)
           data.push({ machine, name, start, end, duration, status: "220", type: "Power on/off", material: "" });
-        }
 
         const programs = xml.getElementsByTagName("Program");
         const regex = /^\d{4}[-+]$/;
@@ -77,9 +73,9 @@ export default function App() {
           }
         });
 
-        if (powerStarts.length > 0 && params.calcIdleTime) {
+        if (powerStarts.length > 0 && params.calcIdleTime) 
           data.push({ machine, name, start: "", end: "", duration: idle, status: "220", type: "Idle time", material: "" });
-        }
+        
       } catch (e) {
         console.error("Data fetch error for", url, e);
       }
@@ -93,18 +89,20 @@ export default function App() {
     });
 
     setResults(fixedData);
+    console.log(new Date().toLocaleTimeString(), "nesting results:", fixedData.length);
+    
     setLoaded(true);
     setUpdated(true);
 
-    console.log(new Date().toLocaleTimeString(), "nesting results:", fixedData.length);
   }, [params.calcIdleTime, getFileUrl]);
 
   const fetchStats = useCallback(() => {
     console.log(new Date().toLocaleTimeString(), "fetching stats");
-    const fixedDate = new Intl.DateTimeFormat("lt-LT").format(date).replaceAll("-", ".");
-    fetch("http://192.168.100.102/nesting/akron/stats.asp?" + fixedDate)
+    const shortDate = new Intl.DateTimeFormat("lt-LT").format(date).replaceAll("-", ".");
+    fetch("http://192.168.100.102/nesting/akron/stats.asp?" + shortDate)
       .then(res => res.json())
       .then(data => {
+
         setStats({
           on: data.on ?? "00:00:00",
           off: data.off ?? "00:00:00",
@@ -112,6 +110,7 @@ export default function App() {
           panels: data.panels ?? 0,
           meters: data.meters ?? 0.0,
         });
+
         setLoaded(true);
         setUpdated(true);
       })
@@ -121,9 +120,8 @@ export default function App() {
   }, [date]);
 
   useEffect(() => {
-    if (!loaded || !updated) {
+    if (!loaded || !updated)
       view === 4 ? fetchStats() : fetchResults();
-    }
 
     const interval = setInterval(() => {
       const isToday = new Date(date).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0);
@@ -133,7 +131,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [date, view, loaded, updated, fetchResults, fetchStats]);
 
-  const handleDateChange = event => {
+  function handleDateChange(event) {
     const newDate = new Date(event.target.value);
     if (!isNaN(newDate)) {
       setDate(newDate);
@@ -142,7 +140,7 @@ export default function App() {
     event.target.blur();
   };
 
-  const handleViewChange = value => {
+  function handleViewChange(value) {
     if (view === 4 || value === 4) setLoaded(false);
     setView(value);
   };
@@ -150,10 +148,15 @@ export default function App() {
   function toggleIdleTime() {
     setParams(p => ({ ...p, calcIdleTime: !p.calcIdleTime }));
     setLoaded(false);
-  }
+  };
 
-  const toggleExpandAll = () => {
+  function toggleExpandAll() {
     setParams(p => ({ ...p, expandAll: !p.expandAll }));
+  };
+
+  const Spinner = () => {
+    if (!loaded || !updated) return <div className="dot-pulse" />
+    return null;
   };
 
   const DatePicker = ({ value, onChange }) => {
@@ -170,11 +173,6 @@ export default function App() {
       case 4: return <Stats stats={stats} loaded={loaded} />;
       default: return null;
     }
-  }
-
-  const Spinner = () => {
-    if (!loaded || !updated) return <div className="dot-pulse" />
-    return null;
   };
 
   return (
