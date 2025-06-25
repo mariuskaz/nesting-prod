@@ -307,8 +307,8 @@ input[type="checkbox"], input[type="radio"] {
 }
 
 @media screen and (max-device-width: 800px) {
- body, html {
-  margin-left:30px;
+ #root {
+  margin-left:52px;
  }
 }
 
