@@ -3,7 +3,8 @@ import React from 'react';
 export default function Stats({ stats, loaded }) {
 
     const resultsText = {
-        color: loaded ? "inherit" : "#fafafa",
+        color: loaded ? "gray" : "#fafafa",
+        fontWeight: "600",
     }
 
     return (
@@ -35,7 +36,7 @@ export default function Stats({ stats, loaded }) {
                     </tr>
                     <tr>
                         <td>Programos keitimų skaičius</td>
-                        <td style={resultsText}>0</td>
+                        <td style={resultsText}>{stats.programs}</td>
                     </tr>
                     <tr>
                         <td>Rankinio paruošimo laikas</td>

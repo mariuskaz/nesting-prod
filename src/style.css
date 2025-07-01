@@ -306,7 +306,7 @@ input[type="checkbox"], input[type="radio"] {
   font-weight:500;
 }
 
-@media screen and (max-device-width: 800px) {
+@media screen and (max-device-width: 1024px) {
  #root {
   margin-left:52px;
  }
@@ -332,12 +332,6 @@ input[type="checkbox"], input[type="radio"] {
     margin-left:50%;
     position:absolute;
 }
-
-@media screen and (max-width: 800px) {
-    .dot-pulse {
-        margin-left:50%;
-    }
-  }
 
 .dot-pulse::before, .dot-pulse::after {
     content: '';

@@ -17,7 +17,7 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [updated, setUpdated] = useState(false);
   const [results, setResults] = useState([]);
-  const [stats, setStats] = useState({ on: "00:00:00", off: "00:00:00", panels: 0, meters: 0.0, working: "00:00:00" });
+  const [stats, setStats] = useState({ on: "00:00:00", off: "00:00:00", panels: 0, programs: 0, meters: 0.0, working: "00:00:00" });
   const [params, setParams] = useState({ calcIdleTime: true, expandAll: true });
 
   const getFileUrl = useCallback(() => {
@@ -108,6 +108,7 @@ export default function App() {
           off: data.off ?? "00:00:00",
           working: data.working ?? "00:00:00",
           panels: data.panels ?? 0,
+          programs: data.programs ?? 0,
           meters: data.meters ?? 0.0,
         });
 
