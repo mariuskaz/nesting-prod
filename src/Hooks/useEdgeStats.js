@@ -9,7 +9,7 @@ const initialStats = {
 	working: "00:00:00"
 };
 
-export default function useStats(date) {
+export default function useEdgeStats(date) {
 	const [stats, setStats] = useState(initialStats);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import useNestingResults from "./Hooks/useNestingResults";
-import useStats from "./Hooks/useStats";
+import useEdgeStats from "./Hooks/useEdgeStats";
 import NestingCharts from "./Components/NestingCharts";
 import DataTable from "./Components/DataTable";
 import Sidebar from "./Components/Sidebar";
@@ -25,7 +25,7 @@ export default function App() {
 	const location = useLocation();
 
 	const { results, isLoading: isLoadingResults, fetchResults } = useNestingResults(date, params);
-	const { stats, isLoading: isLoadingStats, fetchStats } = useStats(date);
+	const { stats, isLoading: isLoadingStats, fetchStats } = useEdgeStats(date);
 
 	const loaded = !isLoadingResults && !isLoadingStats;
 
@@ -109,21 +109,21 @@ export default function App() {
 		<Sidebar view={view} onChange={handleSidebarChange} />
 		<DatePicker value={date} onChange={handleDateChange} />
 		<Routes>
-		<Route path="/params" element={
-			<Params params={params} items={results} toggleIdle={toggleIdleTime} toggleExpand={toggleExpandAll} />
-		} />
-		<Route path="/charts" element={
-			<NestingCharts date={date} items={results} />
-		} />
-		<Route path="/programs" element={
-			<DataTable title="Įvykdytos programos" date={date} items={programResults} expand={params.expandAll} />
-		} />
-		<Route path="/alerts" element={
-			<DataTable title="Sutrikimai" date={date} items={alertResults} expand={params.expandAll} />
-		} />
-		<Route path="/stats" element={
-			<Stats stats={stats} loaded={loaded} />
-		} />
+			<Route path="/params" element={
+				<Params params={params} items={results} toggleIdle={toggleIdleTime} toggleExpand={toggleExpandAll} />
+			} />
+			<Route path="/charts" element={
+				<NestingCharts date={date} items={results} />
+			} />
+			<Route path="/programs" element={
+				<DataTable title="Įvykdytos programos" date={date} items={programResults} expand={params.expandAll} />
+			} />
+			<Route path="/alerts" element={
+				<DataTable title="Sutrikimai" date={date} items={alertResults} expand={params.expandAll} />
+			} />
+			<Route path="/stats" element={
+				<Stats stats={stats} loaded={loaded} />
+			} />
 		</Routes>
 	</>
 	);
