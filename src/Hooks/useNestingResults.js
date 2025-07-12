@@ -7,7 +7,7 @@ const LOCATIONS = [
 ];
 
 const PROGRAM_TYPE_MAP = {
-    PRODUCTION: /^\d{4}[-+]$/,
+    PRODUCTION:  /^\d{4}[-+]$|^SR\d+|^BF\d+/i,
     MAINTENANCE: /CINAVIM|NUTRAUKIM/i,
     BROKEN: /BR/i,
     SECOND_WORK: /_J[12]C/
