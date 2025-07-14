@@ -9,7 +9,7 @@ import Params from "./Components/Params";
 import Stats from "./Components/Stats";
 
 const ROUTES = ["/params", "/charts", "/programs", "/alerts", "/stats"];
-const STATS = 4;
+const STATS = ROUTES.indexOf("/stats");
 
 const initialParams = {
 	calcIdleTime: true,
