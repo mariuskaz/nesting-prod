@@ -122,7 +122,7 @@ export default function App() {
 				<DataTable title="Sutrikimai" date={date} items={alertResults} expand={params.expandAll} />
 			} />
 			<Route path="/stats" element={
-				<Stats stats={stats} loaded={loaded} />
+				<Stats date={date} stats={stats} loaded={loaded} />
 			} />
 		</Routes>
 	</>

@@ -1,67 +1,69 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-export default function Stats({ stats, loaded }) {
+const Title = ({name, desc}) => (
+    <div className="box">
+        <p className="bold">{name}<br/>
+        <small>{desc}</small></p>
+    </div>
+)
 
-    const resultsText = {
-        color: loaded ? "gray" : "#fafafa",
+const PowerStats = ({style, on, off}) => (
+    <div className="box" style={{ padding: "20px 10px" }}>
+        <div className='inline'>Power On <span style={style}>{on}</span></div>
+        <div className='inline'>Power Off <span style={style}>{off}</span></div>
+    </div>
+)   
+
+const WorkingStats = ({rows}) => (
+    <div className="box">
+        <table className="stat-table">
+            <tbody>{rows}</tbody>
+        </table>
+    </div>
+);
+
+export default function Stats({date, stats, loaded}) {
+    const [synced, setSynced] = React.useState(false);
+    const defaultTimes = "00:00:00";
+
+    useEffect(() => {
+        if (loaded) setSynced(true);
+    }, [loaded]);
+
+    useEffect(() => setSynced(false), [date]);
+
+    const name = "KANTAVIMO STAKLĖS";
+    const desc = "BIESSE AKRON 1330-A S/N 1000061614";
+    
+    const values = {
+        "Apdirbtos plokštės": stats.panels,
+        "Apdirbti tiesiniai metrai": stats.meters,  
+        "Programos paruošimo laikas": defaultTimes,
+        "Programos keitimų skaičius": stats.programs,
+        "Rankinio paruošimo laikas": defaultTimes,
+        "Staklių techninės priežiūros laikas": defaultTimes,
+        "Staklių avarinės būsenos laikas": defaultTimes,
+        "Staklių darbo laikas": stats.working,
+        "Tuščių staklių darbo laikas": defaultTimes,
+    };
+
+    const style = {
+        color: synced ? "#808080" : "#fafafa",
         fontWeight: "600",
-    }
+    };
+
+    const StatRows = Object.entries(values).map(([key, value]) => (
+        <tr key={key}>
+            <td>{key}</td>
+            <td style={style}>{value}</td>
+        </tr>
+    ));
 
     return (
-    <>
-        <div className="box">
-            <p className="bold">KANTAVIMO STAKLĖS<br/>
-            <small>BIESSE AKRON 1330-A S/N 1000061614</small></p>
-        </div>
-        <div className="box">
-            <br/>
-            <div className='inline'>Power On <span style={resultsText}>{stats.on}</span></div>
-            <div className='inline'>Power Off <span style={resultsText}>{stats.off}</span></div>
-            <br/>
-        </div>
-        <div className="box">
-            <table className="stat-table">
-                <tbody>
-                    <tr>
-                        <td>Apdirbtos plokštės</td>
-                        <td style={resultsText}>{stats.panels}</td>
-                    </tr>
-                    <tr>
-                        <td>Apdirbti tiesiniai metrai</td>
-                        <td style={resultsText}>{stats.meters}</td>
-                    </tr>
-                    <tr>
-                        <td>Programos paruošimo laikas</td>
-                        <td style={resultsText}>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td>Programos keitimų skaičius</td>
-                        <td style={resultsText}>{stats.programs}</td>
-                    </tr>
-                    <tr>
-                        <td>Rankinio paruošimo laikas</td>
-                        <td style={resultsText}>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td>Staklių techninės priežiūros laikas</td>
-                        <td style={resultsText}>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td>Staklių avarinės būsenos laikas</td>
-                        <td style={resultsText}>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td>Staklių darbo laikas</td>
-                        <td style={resultsText}>{stats.working}</td>
-                    </tr>
-                    <tr>
-                        <td>Tuščių staklių darbo laikas</td>
-                        <td style={resultsText}>00:00:00</td>
-                    </tr>
-                    <tr></tr>
-                </tbody>
-            </table>
-        </div>
-    </>
+        <>
+            <Title name={name} desc={desc} />
+            <PowerStats style={style} on={stats.on} off={stats.off} />
+            <WorkingStats rows={StatRows} />
+        </>
     )
 }
